@@ -26,21 +26,21 @@ Com essa plataforma, espera-se otimizar o processo de registro de presença, gar
 
 A aplicação será desenvolvida utilizando o padrão **MVC** (Model-View-Controller), uma arquitetura que separa o sistema em três camadas principais, facilitando a organização e manutenção do código.
 
-# 1. Model (Modelo)
+### 1. Model (Modelo)
 
 A camada **Model** é responsável pela lógica dos dados da aplicação. Ela representa as entidades do sistema e contém as regras de negócio e a comunicação com o banco de dados. Os seus atributos podem ser representados pelo diagrama de classes. Essa camada é responsável pelo **CRUD** (criar, consultar, atualizar e deletar) dos dados e validar as regras de negócio.
 
 Diagrama de Classes: modelagem das entidades (Aluno, Professor, Oficina)
 ![Diagrama de classes](./docs/DiagramaDeClasses.drawio.png)
 
-# 2. View (Visão)
+### 2. View (Visão)
 
 A camada **View** é a interface do usuário. É onde o usuário interage com o sistema, seja para registrar a presença, fazer login, visualizar relatório, etc. As ações dos usuários podem ser visto no diagrama de casos de uso. Essa camada é responsável por exibir as informações ao usuário, capturar seus inputs e enviar a ação para o controller.
 
 Diagrama de Casos de Uso: descrição das principais interações dos usuários com o sistema
 ![Diagrama de Casos de Uso](./docs/DiagramaDeCasosDeUso.drawio.png)
 
-# 3. Controller (Controle)
+### 3. Controller (Controle)
 
 A camada **Controller** atua como o intermediário entre o **View** e o **Model**. Ele recebe as requisições da UI, processa as ações e consulta ou atualiza os dados no **Model**, retornando a resposta para o **View**. Ele é responsável por gerenciar o fluxo da aplicação e coordenar, validar e tratar as chamadas entre o **View** e o **Model**
 
