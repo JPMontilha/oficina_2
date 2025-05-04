@@ -332,7 +332,7 @@ function InstalarFerramentasExtras {
     Log "Instalando ferramentas extras para o projeto..."
     
     Log "Verificando pacotes globais do Node.js..."
-    $pacotesNpm = @("nodemon", "express-generator", "create-react-app", "yarn")
+    $pacotesNpm = @("nodemon", "express-generator", "create-react-app", "yarn", "mocha", "chai")
     
     foreach ($pacote in $pacotesNpm) {
         if (-not (ComandoExiste $pacote)) {
@@ -420,6 +420,40 @@ function CriarEstruturaProjeto {
         Log "Inicializando projeto Express no backend..."
         Set-Location "backend"
         npx express-generator --no-view --quiet
+        
+        Log "Instalando dependências no backend..."
+        npm install
+
+        Log "Adicionando Mocha e Chai para testes no backend..."
+        npm install mocha chai --save-dev
+        
+        # Criar diretório para testes
+        New-Item -ItemType Directory -Path "test" -Force | Out-Null
+        
+        # Criar arquivo de exemplo de teste com Mocha e Chai
+        $testExampleContent = @"
+const chai = require('chai');
+const expect = chai.expect;
+
+describe('Exemplo de teste', function() {
+  it('deve retornar verdadeiro', function() {
+    expect(true).to.equal(true);
+  });
+  
+  it('deve realizar operações matemáticas corretamente', function() {
+    expect(2 + 2).to.equal(4);
+    expect(8 / 2).to.equal(4);
+  });
+});
+"@
+        Set-Content -Path "test/example.test.js" -Value $testExampleContent
+        
+        # Adicionar script de teste no package.json
+        $packageJson = Get-Content -Path "package.json" -Raw
+        $packageJson = $packageJson -replace '"scripts": {', '"scripts": {
+    "test": "mocha",'
+        Set-Content -Path "package.json" -Value $packageJson
+        
         Set-Location ".."
         
         # Criar arquivos de configuração
