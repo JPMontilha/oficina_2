@@ -13,12 +13,12 @@ $InstalarGUI = $true
 $InstalarExtras = $true
 $ModoSilencioso = $false
 
-param (
-    [switch]$n # Modo não-interativo
-    [switch]$g # Não instalar interfaces gráficas
-    [switch]$e # Não instalar ferramentas extras
-    [switch]$s # Modo silencioso
-    [switch]$h # Exibir ajuda
+param(
+    [switch]$s,  # Modo silencioso
+    [switch]$n,  # Modo não-interativo
+    [switch]$g,  # Não instalar interfaces gráficas
+    [switch]$e,  # Não instalar ferramentas extras
+    [switch]$h   # Mostrar ajuda
 )
 
 if ($n) { $ModoInterativo = $false }
