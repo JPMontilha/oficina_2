@@ -9,7 +9,7 @@ Os scripts neste repositório automatizam a instalação e configuração das fe
 - Frontend: React
 - Backend: Node.js + Express
 - Bancos de Dados: MongoDB e/ou PostgreSQL
-- Testes: Playwright
+- Testes: Playwright, Mocha e Chai
 - Documentação: Draw.io
 - Controle de versão: Git + GitHub
 
@@ -105,13 +105,18 @@ Os scripts instalam e configuram as seguintes ferramentas:
    - Playwright (para testes)
    - Draw.io Desktop
 
-4. **Pacotes NPM Globais**
+4. **Ferramentas de Teste**
+   - Playwright (para testes end-to-end)
+   - Mocha (framework de teste para JavaScript)
+   - Chai (biblioteca de asserção para testes)
+
+5. **Pacotes NPM Globais**
    - nodemon
    - express-generator
    - create-react-app
    - yarn
 
-5. **Extensões do VS Code**
+6. **Extensões do VS Code**
    - React/JavaScript: ES7 React Snippets, ESLint, Prettier
    - Node.js: NPM IntelliSense, DotENV
    - Banco de dados: MongoDB, PostgreSQL Client
@@ -128,6 +133,7 @@ Ambos os scripts podem criar uma estrutura básica de projeto com a seguinte org
 my_project/
 ├── frontend/         # Aplicação React
 ├── backend/          # API Express
+│   └── test/         # Testes unitários com Mocha e Chai
 ├── docs/             # Documentação
 ├── .gitignore        # Configurado para Node.js/React
 ├── docker-compose.yml  # Configuração para MongoDB e PostgreSQL
@@ -141,6 +147,7 @@ my_project/
 - Configurações personalizadas podem ser feitas através das opções de linha de comando
 - O script roda em modo interativo por padrão, perguntando preferências quando necessário
 - Relatório de tempo total de execução é exibido ao final
+- Mocha e Chai são configurados automaticamente com um exemplo de teste básico
 
 ---
 

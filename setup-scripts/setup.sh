@@ -596,7 +596,7 @@ instalar_ferramentas_extras() {
     log "Instalando ferramentas extras para o projeto..."
     
     log "Verificando pacotes globais do Node.js..."
-    local pacotes_npm=("nodemon" "express-generator" "create-react-app" "yarn")
+    local pacotes_npm=("nodemon" "express-generator" "create-react-app" "yarn" "mocha")
     local pacotes_para_instalar=()
     
     for pkg in "${pacotes_npm[@]}"; do
@@ -694,6 +694,36 @@ criar_estrutura_projeto() {
             npm install -g express-generator
             npx express-generator --no-view
         fi
+        
+        log "Instalando dependências no backend..."
+        npm install
+        
+        log "Adicionando Mocha e Chai para testes no backend..."
+        npm install mocha chai --save-dev
+        
+        # Criar diretório para testes
+        mkdir -p test
+        
+        # Criar arquivo de exemplo de teste com Mocha e Chai
+        cat << EOF > test/example.test.js
+const chai = require('chai');
+const expect = chai.expect;
+
+describe('Exemplo de teste', function() {
+  it('deve retornar verdadeiro', function() {
+    expect(true).to.equal(true);
+  });
+  
+  it('deve realizar operações matemáticas corretamente', function() {
+    expect(2 + 2).to.equal(4);
+    expect(8 / 2).to.equal(4);
+  });
+});
+EOF
+
+        # Adicionar script de teste no package.json
+        sed -i.bak 's/"scripts": {/"scripts": {\n    "test": "mocha",/g' package.json && rm package.json.bak
+        
         cd .. || { log "Falha ao voltar ao diretório do projeto" "ERRO"; return 1; }
         
         log "Criando arquivos de configuração..."
