@@ -8,5 +8,7 @@ router.post('/', alunoController.criarAluno);
 router.get('/', alunoController.listarAlunos);
 //Rota de atualização de aluno
 router.put('/:id', alunoController.atualizarAluno);
+//Rota de deleção de aluno
+router.delete('/:id', alunoController.deletarAluno);
 
 module.exports = router;

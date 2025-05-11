@@ -34,8 +34,22 @@ async function atualizarOficina(req, res) {
     }
 }
 
+//Deletar oficina
+async function deletarOficina(req, res) {
+    try {
+        const oficinaDeletada = await Oficina.findByIdAndDelete(req.params.id);
+        if (!oficinaDeletada) {
+            return res.status(404).json({ erro: 'Oficina não encontrada' });
+        }
+        res.status(200).json({ mensagem: 'Oficina deletada com sucesso' });
+    } catch (err) {
+        res.status(400).json({ erro: err.message });
+    }
+}
+
 module.exports = {
     criarOficina,
     listarOficinas,
-    atualizarOficina
+    atualizarOficina,
+    deletarOficina
 };

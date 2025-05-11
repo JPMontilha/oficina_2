@@ -8,5 +8,7 @@ router.post('/', oficinaController.criarOficina);
 router.get('/', oficinaController.listarOficinas);
 //Rota de atualização de oficina
 router.put('/:id', oficinaController.atualizarOficina);
+//Rota de deleção de oficina
+router.delete('/:id', oficinaController.deletarOficina);
 
 module.exports = router;

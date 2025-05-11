@@ -43,8 +43,22 @@ async function atualizarAluno(req, res) {
     }
 }
 
+//Deletar aluno
+async function deletarAluno(req, res) {
+    try {
+        const alunoDeletado = await Aluno.findByIdAndDelete(req.params.id);
+        if (!alunoDeletado) {
+            return res.status(404).json({ erro: 'Aluno não encontrado' });
+        }
+        res.status(200).json({ mensagem: 'Aluno deletado com sucesso' });
+    } catch (err) {
+        res.status(400).json({ erro: err.message });
+    }
+}
+
 module.exports = {
     criarAluno,
     listarAlunos,
-    atualizarAluno
+    atualizarAluno,
+    deletarAluno
 };

@@ -43,8 +43,22 @@ async function atualizarProfessor(req, res) {
     }
 }
 
+//Deletar professor
+async function deletarProfessor(req, res) {
+    try {
+        const professorDeletado = await Professor.findByIdAndDelete(req.params.id);
+        if (!professorDeletado) {
+            return res.status(404).json({ erro: 'Professor não encontrado' });
+        }
+        res.status(200).json({ mensagem: 'Professor deletado com sucesso' });
+    } catch (err) {
+        res.status(400).json({ erro: err.message });
+    }
+}
+
 module.exports = {
     criarProfessor,
     listarProfessores,
-    atualizarProfessor
+    atualizarProfessor,
+    deletarProfessor
 };
