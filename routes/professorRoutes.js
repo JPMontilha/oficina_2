@@ -6,5 +6,7 @@ const professorController = require('../controllers/professorController');
 router.post('/', professorController.criarProfessor);
 // Rota de listagem de professores
 router.get('/', professorController.listarProfessores);
+// Rota de atualização de professor
+router.put('/:id', professorController.atualizarProfessor);
 
 module.exports = router;

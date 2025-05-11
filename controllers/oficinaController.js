@@ -20,7 +20,22 @@ async function listarOficinas(req, res) {
     }
 }
 
+//Atualizar oficina
+async function atualizarOficina(req, res) {
+    try {
+        const atualizacoes = { ...req.body };
+        const oficinaAtualizada = await Oficina.findByIdAndUpdate(req.params.id, atualizacoes, { new: true });
+        if (!oficinaAtualizada) {
+            return res.status(404).json({ erro: 'Oficina não encontrada' });
+        }
+        res.json(oficinaAtualizada);
+    } catch (err) {
+        res.status(400).json({ erro: err.message });
+    }
+}
+
 module.exports = {
     criarOficina,
-    listarOficinas
+    listarOficinas,
+    atualizarOficina
 };

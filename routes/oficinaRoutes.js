@@ -6,5 +6,7 @@ const oficinaController = require('../controllers/oficinaController');
 router.post('/', oficinaController.criarOficina);
 //Rota de listagem de oficinas
 router.get('/', oficinaController.listarOficinas);
+//Rota de atualização de oficina
+router.put('/:id', oficinaController.atualizarOficina);
 
 module.exports = router;

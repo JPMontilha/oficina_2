@@ -6,5 +6,7 @@ const alunoController = require('../controllers/alunoController');
 router.post('/', alunoController.criarAluno);
 // Rota de listagem de alunos
 router.get('/', alunoController.listarAlunos);
+//Rota de atualização de aluno
+router.put('/:id', alunoController.atualizarAluno);
 
 module.exports = router;
