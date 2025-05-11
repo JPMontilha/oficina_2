@@ -7,7 +7,10 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/_mocha || exit 0"
+    "test": "node ./node_modules/mocha/bin/_mocha || exit 0",
+    "seed": "node ./seed.js",
+    "start": "node ./app.js",
+    "dev": "nodemon ./app.js"
   },
   "author": "",
   "license": "ISC",
