@@ -1,10 +1,11 @@
 {
   "name": "oficina_2",
   "version": "1.0.0",
-  "description": "",
+  "description": "Este projeto faz parte da disciplina de Oficina de Integração 2, cujo objetivo é o desenvolvimento de um sistema para o registro de presença de alunos nas oficinas do projeto de extensão **ELLP - Ensino Lúdico de Lógica e Programação**.",
   "main": "index.js",
   "directories": {
-    "doc": "docs"
+    "doc": "docs",
+    "test": "test"
   },
   "scripts": {
     "test": "node ./node_modules/mocha/bin/_mocha || exit 0",

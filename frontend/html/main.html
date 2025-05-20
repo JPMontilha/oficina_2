@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Registro de Eventos Acadêmicos</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">SisGestão Acadêmica</div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Início</a></li>
+                    <li><a href="#">Oficina</a></li>
+                    <li><a href="#">Alunos</a></li>
+                    <li><a href="#">Professores</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Sistema de Registro de Oficinas Acadêmicos</h1>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h3 class="card-title">Total de Oficinas</h3>
+                <p class="card-count">24</p>
+                <p>Oficinas registrados no sistema</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Alunos Participantes</h3>
+                <p class="card-count">156</p>
+                <p>Alunos com participação registrada</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Professores Envolvidos</h3>
+                <p class="card-count">18</p>
+                <p>Professores que ministram ou coordenam eventos</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Registrar Nova Oficina</h2>
+            <form>
+                <div class="form-group">
+                    <label class="form-label" for="oficina-nome">Nome do Oficina</label>
+                    <input type="text" class="form-control" id="oficina-nome" placeholder="Digite o nome do evento">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="oficina-tipo">Tipo de Oficina</label>
+                    <select class="form-control" id="oficina-tipo">
+                        <option value="">Selecione um tipo</option>
+                        <option value="palestra">Palestra</option>
+                        <option value="workshop">Workshop</option>
+                        <option value="seminario">Seminário</option>
+                        <option value="curso">Curso</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="oficina-data">Data</label>
+                    <input type="date" class="form-control" id="oficina-data">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="oficina-local">Local</label>
+                    <input type="text" class="form-control" id="oficina-local" placeholder="Digite o local do oficina">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="oficina-descricao">Descrição</label>
+                    <textarea class="form-control" id="oficina-descricao" rows="4" placeholder="Descreva o oficina"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Cadastrar Oficina</button>
+            </form>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <h2 class="card-title">Meus Eventos</h2>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Tipo</th>
+                            <th>Data</th>
+                            <th>Local</th>
+                            <th>Responsável</th>
+                            <th>Participantes</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Introdução à Inteligência Artificial</td>
+                            <td>Palestra</td>
+                            <td>10/05/2025</td>
+                            <td>Auditório Principal</td>
+                            <td>Carlos Oliveira</td>
+                            <td>42</td>
+                            <td class="actions">
+                                <a href="#" class="btn btn-primary">Editar</a>
+                                <a href="#" class="btn btn-danger">Excluir</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Workshop de Programação Web</td>
+                            <td>Workshop</td>
+                            <td>12/05/2025</td>
+                            <td>Laboratório 3</td>
+                            <td>Marina Santos</td>
+                            <td>25</td>
+                            <td class="actions">
+                                <a href="#" class="btn btn-primary">Editar</a>
+                                <a href="#" class="btn btn-danger">Excluir</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Seminário de Metodologia Científica</td>
+                            <td>Seminário</td>
+                            <td>08/05/2025</td>
+                            <td>Sala 204</td>
+                            <td>Ana Silva</td>
+                            <td>18</td>
+                            <td class="actions">
+                                <a href="#" class="btn btn-primary">Editar</a>
+                                <a href="#" class="btn btn-danger">Excluir</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2025 SisGestão Acadêmica | Sistema de Registro de Eventos</p>
+            <p>Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

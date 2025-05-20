@@ -14,3 +14,7 @@ Thumbs.db
 # Ignorar diretório de build
 dist/
 build/
+
+# Ignorar package
+package.json
+package-lock.json
