@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisGestão Acadêmica - Professores</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">SisGestão Acadêmica</div>
+            <nav>
+                <ul>
+                    <li><a href="#">Início</a></li>
+                    <li><a href="#">Oficina</a></li>
+                    <li><a href="#">Alunos</a></li>
+                    <li><a href="#" class="active">Professores</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Lista de Professores</h1>
+        
+        <div class="card">
+            <div class="search-container">
+                <input type="text" id="search-professores" class="form-control" placeholder="Pesquisar professores...">
+            </div>
+            
+            <div class="table-container">
+                <table class="table" id="professores-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Área</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>PROF001</td>
+                            <td>Carlos Oliveira</td>
+                            <td>carlos.oliveira@email.com</td>
+                            <td>Inteligência Artificial</td>
+                        </tr>
+                        <tr>
+                            <td>PROF002</td>
+                            <td>Marina Santos</td>
+                            <td>marina.santos@email.com</td>
+                            <td>Programação Web</td>
+                        </tr>
+                        <tr>
+                            <td>PROF003</td>
+                            <td>Ana Silva</td>
+                            <td>ana.silva@email.com</td>
+                            <td>Metodologia Científica</td>
+                        </tr>
+                        <tr>
+                            <td>PROF004</td>
+                            <td>Ricardo Pereira</td>
+                            <td>ricardo.pereira@email.com</td>
+                            <td>Banco de Dados</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2025 SisGestão Acadêmica | Sistema de Registro de Eventos</p>
+            <p>Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <script src="../script/professores.js"></script>
+</body>
+</html>

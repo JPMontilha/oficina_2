@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SisGestão Acadêmica - Alunos</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">SisGestão Acadêmica</div>
+            <nav>
+                <ul>
+                    <li><a href="#">Início</a></li>
+                    <li><a href="#">Oficina</a></li>
+                    <li><a href="#" class="active">Alunos</a></li>
+                    <li><a href="#">Professores</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Lista de Alunos</h1>
+        
+        <div class="card">
+            <div class="search-container">
+                <input type="text" id="search-alunos" class="form-control" placeholder="Pesquisar alunos...">
+                <button id="toggle-mode" class="btn btn-primary">Modo Edição Período</button>
+            </div>
+            
+            <div class="table-container">
+                <table class="table" id="alunos-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Período</th>
+                            <th class="edit-period hidden">Alterar Período</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2023001</td>
+                            <td>Ana Carolina Silva</td>
+                            <td>ana.silva@email.com</td>
+                            <td>3</td>
+                            <td class="edit-period hidden">
+                                <select class="period-select">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3" selected>3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2023002</td>
+                            <td>Bruno Oliveira</td>
+                            <td>bruno.oliveira@email.com</td>
+                            <td>5</td>
+                            <td class="edit-period hidden">
+                                <select class="period-select">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5" selected>5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2023003</td>
+                            <td>Carlos Eduardo Santos</td>
+                            <td>carlos.santos@email.com</td>
+                            <td>2</td>
+                            <td class="edit-period hidden">
+                                <select class="period-select">
+                                    <option value="1">1</option>
+                                    <option value="2" selected>2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2023004</td>
+                            <td>Daniela Costa</td>
+                            <td>daniela.costa@email.com</td>
+                            <td>7</td>
+                            <td class="edit-period hidden">
+                                <select class="period-select">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7" selected>7</option>
+                                    <option value="8">8</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2025 SisGestão Acadêmica | Sistema de Registro de Eventos</p>
+            <p>Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <script src="../script/alunos.js"></script>
+</body>
+</html>
