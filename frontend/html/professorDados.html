@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Dados - Professor</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">SisGestão Acadêmica</div>
+            <nav>
+                <ul>
+                    <li><a href="professorMain.html">Início</a></li>
+                    <li><a href="#">Oficinas</a></li>
+                    <li><a href="professorDados.html" class="active">Meus Dados</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="page-title">Meus Dados</h1>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h2 class="card-title">Informações Pessoais</h2>
+                <div class="user-info">
+                    <div class="info-group">
+                        <span class="info-label">Nome:</span>
+                        <span class="info-value">Carlos Oliveira</span>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">Código:</span>
+                        <span class="info-value">PR2025001</span>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">E-mail:</span>
+                        <span class="info-value">carlos.oliveira@escola.edu</span>
+                    </div>
+                    <div class="info-group">
+                        <span class="info-label">Senha:</span>
+                        <span class="info-value">••••••••</span>
+                        <button class="btn btn-primary btn-small">Alterar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <h2 class="card-title">Minhas Oficinas</h2>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Tipo</th>
+                            <th>Data</th>
+                            <th>Local</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Inteligência Artificial</td>
+                            <td>Curso</td>
+                            <td>Terça e Quinta</td>
+                            <td>Sala 204</td>
+                            <td class="actions">
+                                <button class="btn btn-primary btn-small">Gerenciar Alunos</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Programação Avançada</td>
+                            <td>Workshop</td>
+                            <td>Segunda e Quarta</td>
+                            <td>Lab. Informática 2</td>
+                            <td class="actions">
+                                <button class="btn btn-primary btn-small">Gerenciar Alunos</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2025 SisGestão Acadêmica | Sistema de Registro de Eventos</p>
+            <p>Todos os direitos reservados</p>
+        </div>
+    </footer>
+    
+    <!-- Modal de Edição de Dados -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Alterar Dados</h2>
+            <form id="edit-form" class="edit-form">
+                <div class="form-group">
+                    <label for="edit-email" class="form-label">Novo E-mail:</label>
+                    <input type="email" id="edit-email" class="form-control" placeholder="Digite seu novo e-mail">
+                </div>
+                <div class="form-group">
+                    <label for="edit-senha" class="form-label">Nova Senha:</label>
+                    <input type="password" id="edit-senha" class="form-control" placeholder="Digite sua nova senha">
+                </div>
+                <div class="form-group">
+                    <label for="edit-confirm-senha" class="form-label">Confirmar Nova Senha:</label>
+                    <input type="password" id="edit-confirm-senha" class="form-control" placeholder="Confirme sua nova senha">
+                </div>
+                <div id="edit-error-message" class="error-message" style="display: none;"></div>
+                <div id="edit-success-message" class="success-message" style="display: none;"></div>
+                <button type="submit" class="btn btn-primary btn-full">Salvar Alterações</button>
+            </form>
+        </div>
+    </div>
+
+<!-- Modal de Gerenciamento de Alunos -->
+<div id="manage-modal" class="modal hidden">
+    <div class="modal-content wide-modal">
+        <span class="close-modal">&times;</span>
+        <h2>Gerenciar Alunos: <span id="workshop-name">Inteligência Artificial</span></h2>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="alunos-inscritos">Alunos Inscritos</button>
+            <button class="tab-btn" data-tab="adicionar-alunos">Adicionar Alunos</button>
+        </div>
+        
+        <!-- Aba de Alunos Inscritos -->
+        <div id="alunos-inscritos" class="tab-content active">
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Código</th>
+                            <th>E-mail</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="students-list">
+                        <tr>
+                            <td>Ana Silva</td>
+                            <td>AL2025001</td>
+                            <td>ana.silva@escola.edu</td>
+                            <td class="actions">
+                                <button class="btn btn-danger btn-small">Remover</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pedro Santos</td>
+                            <td>AL2025002</td>
+                            <td>pedro.santos@escola.edu</td>
+                            <td class="actions">
+                                <button class="btn btn-danger btn-small">Remover</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Aba de Adicionar Alunos -->
+        <div id="adicionar-alunos" class="tab-content">
+            <div class="search-container">
+                <input type="text" id="add-student-search" class="form-control" placeholder="Buscar aluno por nome ou código...">
+                <button class="btn btn-primary">Buscar</button>
+            </div>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Código</th>
+                            <th>E-mail</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="available-students">
+                        <tr>
+                            <td>Marina Oliveira</td>
+                            <td>AL2025003</td>
+                            <td>marina.oliveira@escola.edu</td>
+                            <td class="actions">
+                                <button class="btn btn-success btn-small">Adicionar</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Carlos Mendes</td>
+                            <td>AL2025004</td>
+                            <td>carlos.mendes@escola.edu</td>
+                            <td class="actions">
+                                <button class="btn btn-success btn-small">Adicionar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../script/professorValidator.js"></script>

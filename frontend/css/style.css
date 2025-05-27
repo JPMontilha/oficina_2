@@ -345,6 +345,176 @@ footer {
     display: none;
 }
 
+/* Estilos para as abas */
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 1rem;
+}
+
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--gray-color);
+    transition: all 0.3s;
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Botão de adicionar */
+.btn-success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #219653;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow-y: auto; /* Permite rolagem se o conteúdo for muito grande */
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto; /* Reduzi a margem superior para melhor visualização */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 90%; /* Garante que não fique muito largo em telas pequenas */
+    position: relative;
+    animation: modalFadeIn 0.3s;
+}
+
+/* Container das mensagens - NOVO */
+.message-container {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.error-message, .success-message {
+    padding: 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    display: inline-block;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+/* Ajuste para os botões de ação - CORREÇÃO */
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap; /* Permite quebra de linha se necessário */
+    justify-content: center; /* Centraliza os botões */
+}
+
+.actions .btn {
+    min-width: 80px; /* Largura mínima para melhor visualização */
+    padding: 0.5rem 1rem; /* Aumentei o padding para melhor toque */
+    font-size: 0.9rem;
+    white-space: nowrap; /* Evita quebra de texto nos botões */
+}
+
+/* Garante que o modal fique visível mesmo em telas pequenas */
+@media (max-width: 600px) {
+    .modal-content {
+        margin: 2% auto;
+        padding: 1.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Animações */
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray-color);
+}
+
+.close-modal:hover {
+    color: var(--dark-color);
+}
+
+/* Mostrar modal quando não estiver oculto */
+.modal:not(.hidden) {
+    display: block;
+}
+
+/* Ações na tabela */
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.actions .btn {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .tabs {
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        border-bottom: none;
+        border-left: 3px solid transparent;
+        text-align: left;
+    }
+    
+    .tab-btn.active {
+        border-left-color: var(--primary-color);
+    }
+}
+
 @media (max-width: 768px) {
     .header-content {
         flex-direction: column;
@@ -447,6 +617,195 @@ tr.modified {
     border-color: var(--primary-color);
     outline: none;
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+/* Estilos específicos para a página de Meus Dados */
+.user-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.info-group {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.info-label {
+    font-weight: 500;
+    color: var(--dark-color);
+    min-width: 120px;
+}
+
+.info-value {
+    flex-grow: 1;
+    color: #555;
+}
+
+.btn-small {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+    margin-left: 1rem;
+}
+
+.status-active {
+    color: var(--success-color);
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    background-color: rgba(39, 174, 96, 0.1);
+    border-radius: 4px;
+}
+
+/* Estilos para o modal de edição */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    position: relative;
+    animation: modalFadeIn 0.3s;
+}
+
+@keyframes modalFadeIn {
+    from {opacity: 0; transform: translateY(-50px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray-color);
+}
+
+.close-modal:hover {
+    color: var(--dark-color);
+}
+
+.edit-form {
+    margin-top: 1.5rem;
+}
+
+/* Mostrar modal quando não estiver oculto */
+.modal:not(.hidden) {
+    display: block;
+}
+
+/* Estilos específicos para a página do professor */
+
+/* Modal de gerenciamento */
+.wide-modal {
+    max-width: 800px;
+    width: 90%;
+}
+
+.workshop-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+/* Abas de gerenciamento */
+.tabs-container {
+    margin-top: 1rem;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 1rem;
+}
+
+.tab {
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    font-weight: 500;
+    color: var(--gray-color);
+}
+
+.tab.active {
+    border-bottom: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Ações na tabela */
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-small {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .workshop-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .tabs {
+        flex-direction: column;
+    }
+    
+    .tab {
+        border-bottom: none;
+        border-left: 2px solid transparent;
+    }
+    
+    .tab.active {
+        border-bottom: none;
+        border-left: 2px solid var(--primary-color);
+    }
+}
+
+/* Responsividade para a página de dados */
+@media (max-width: 768px) {
+    .info-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    
+    .info-label {
+        margin-bottom: 0.25rem;
+    }
+    
+    .btn-small {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        width: 100%;
+    }
 }
 
 /* Estilos para a tabela responsiva */

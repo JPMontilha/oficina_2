@@ -1,76 +1,114 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById("cadastro-form");
-    const successMessage = document.getElementById("success-message");
-    const errorMessage = document.getElementById("error-message");
+    // ==============================================
+    // Validação do Formulário de Edição
+    // ==============================================
+    const editForm = document.getElementById("edit-form");
+    const editModal = document.getElementById("edit-modal");
+    const closeModal = document.querySelector(".close-modal");
+    const editError = document.getElementById("edit-error-message");
+    const editSuccess = document.getElementById("edit-success-message");
+    const editButton = document.querySelector(".btn-primary.btn-small"); // Alterado para pegar apenas um botão
 
-    form.addEventListener("submit", function(event) {
-        event.preventDefault(); 
+    // Verifica se os elementos existem
+    if (editModal && editForm) {
+        // Abrir modal ao clicar no botão de editar
+        editButton.addEventListener("click", function(e) {
+            e.preventDefault();
+            // Preencher campo de email com valor atual
+            const currentEmail = document.querySelectorAll(".info-value")[2].textContent;
+            document.getElementById("edit-email").value = currentEmail;
+            
+            editModal.classList.remove("hidden");
+        });
 
-        // Limpar mensagens anteriores
-        hideMessages();
+        // Fechar modal
+        closeModal.addEventListener("click", function() {
+            editModal.classList.add("hidden");
+            hideEditMessages();
+            editForm.reset();
+        });
 
-        // Capturar valores dos campos
-        const email = document.getElementById("user-email").value.trim();
-        const senha = document.getElementById("user-senha").value.trim();
-        const confirmSenha = document.getElementById("user-confirm-senha").value.trim();
-        const codigo = document.getElementById("user-id").value.trim();
-        const tipoUsuario = document.getElementById("user-tipo").value;
+        // Fechar modal ao clicar fora
+        editModal.addEventListener("click", function(event) {
+            if (event.target === editModal) {
+                editModal.classList.add("hidden");
+                hideEditMessages();
+                editForm.reset();
+            }
+        });
 
-        // Regex para validações
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        // Validação do formulário de edição
+        editForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            hideEditMessages();
 
-        // Verificações de validação
-        if (!email || !senha || !confirmSenha || !codigo || !tipoUsuario) {
-            showError("Por favor, preencha todos os campos obrigatórios.");
-            return;
+            const email = document.getElementById("edit-email").value.trim();
+            const senha = document.getElementById("edit-senha").value.trim();
+            const confirmSenha = document.getElementById("edit-confirm-senha").value.trim();
+
+            // Regex para validações
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+            // Verificar se pelo menos um campo foi preenchido
+            if (!email && !senha && !confirmSenha) {
+                showEditError("Por favor, preencha pelo menos um campo para alteração.");
+                return;
+            }
+
+            // Verificações específicas para cada campo preenchido
+            if (email && !emailRegex.test(email)) {
+                showEditError("Por favor, insira um email válido.");
+                return;
+            }
+
+            if (senha && !senhaRegex.test(senha)) {
+                showEditError("A senha deve conter no mínimo 8 caracteres, com pelo menos uma letra maiúscula, uma minúscula e um número.");
+                return;
+            }
+
+            if ((senha || confirmSenha) && senha !== confirmSenha) {
+                showEditError("As senhas não coincidem.");
+                return;
+            }
+
+            // Validação bem-sucedida
+            showEditSuccess("Dados atualizados com sucesso!");
+            
+            // Simular envio para o servidor e atualizar a interface
+            setTimeout(() => {
+                // Atualizar dados na página
+                if (email) {
+                    document.querySelectorAll(".info-value")[2].textContent = email;
+                }
+                
+                // Fechar modal e limpar formulário
+                editModal.classList.add("hidden");
+                hideEditMessages();
+                editForm.reset();
+            }, 1500);
+        });
+
+        // Funções auxiliares para o modal de edição
+        function showEditError(message) {
+            if (editError) {
+                editError.textContent = message;
+                editError.style.display = 'block';
+                if (editSuccess) editSuccess.style.display = 'none';
+            }
         }
 
-        if (!emailRegex.test(email)) {
-            showError("Por favor, insira um email válido.");
-            return;
+        function showEditSuccess(message) {
+            if (editSuccess) {
+                editSuccess.textContent = message;
+                editSuccess.style.display = 'block';
+                if (editError) editError.style.display = 'none';
+            }
         }
 
-        if (!senhaRegex.test(senha)) {
-            showError("A senha deve conter no mínimo 8 caracteres, com pelo menos uma letra maiúscula, uma minúscula e um número.");
-            return;
+        function hideEditMessages() {
+            if (editSuccess) editSuccess.style.display = 'none';
+            if (editError) editError.style.display = 'none';
         }
-
-        if (senha !== confirmSenha) {
-            showError("As senhas não coincidem.");
-            return;
-        }
-
-        if (!codigo || isNaN(codigo) || codigo <= 0) {
-            showError("Por favor, insira um código válido.");
-            return;
-        }
-
-        // Validação bem-sucedida
-        showSuccess("Usuário cadastrado com sucesso!");
-        
-        // Limpar formulário após 3 segundos
-        setTimeout(() => {
-            form.reset();
-            hideMessages();
-        }, 3000);
-    });
-
-    // Funções auxiliares para mostrar/esconder mensagens
-    function showError(message) {
-        errorMessage.textContent = message;
-        errorMessage.style.display = 'block';
-        successMessage.style.display = 'none';
-    }
-
-    function showSuccess(message) {
-        successMessage.textContent = message;
-        successMessage.style.display = 'block';
-        errorMessage.style.display = 'none';
-    }
-
-    function hideMessages() {
-        successMessage.style.display = 'none';
-        errorMessage.style.display = 'none';
     }
 });
