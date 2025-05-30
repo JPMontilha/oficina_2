@@ -1,14 +1,16 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const oficinaController = require('../controllers/oficinaController');
+const oficinaController = require("../controllers/oficinaController");
 
 //Rota de criação de oficina
-router.post('/', oficinaController.criarOficina);
+router.post("/", oficinaController.criarOficina);
 //Rota de listagem de oficinas
-router.get('/', oficinaController.listarOficinas);
+router.get("/", oficinaController.listarOficinas);
+//Rota de busca de oficina por ID
+router.get("/:id", oficinaController.buscarOficinaPorId);
 //Rota de atualização de oficina
-router.put('/:id', oficinaController.atualizarOficina);
+router.put("/:id", oficinaController.atualizarOficina);
 //Rota de deleção de oficina
-router.delete('/:id', oficinaController.deletarOficina);
+router.delete("/:id", oficinaController.deletarOficina);
 
 module.exports = router;

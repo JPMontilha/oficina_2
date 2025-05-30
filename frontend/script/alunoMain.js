@@ -1,0 +1,173 @@
+document.addEventListener("DOMContentLoaded", function () {
+  if (!requireLogin()) return;
+
+  const userData = userSession.get();
+
+  if (userData.tipo !== "aluno") {
+    showMessage("Acesso negado. Esta página é apenas para alunos.", "error");
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 2000);
+    return;
+  }
+
+  const logoutButton = document.getElementById("logout-btn");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", logout);
+  }
+
+  loadAlunoData();
+  loadOficinasDoAluno();
+});
+
+async function loadAlunoData() {
+  try {
+    const userData = userSession.get();
+    const aluno = await alunosAPI.buscarPorId(userData._id);
+
+    updateAlunoInfo(aluno);
+  } catch (error) {
+    console.error("Erro ao carregar dados do aluno:", error);
+    showMessage("Erro ao carregar seus dados", "error");
+  }
+}
+
+function updateAlunoInfo(aluno) {
+  const userNameElement = document.querySelector(".user-name");
+  if (userNameElement) {
+    userNameElement.textContent = aluno.user.email;
+  }
+
+  const periodoElement = document.querySelector(".card-count");
+  if (periodoElement) {
+    periodoElement.textContent = aluno.periodo;
+  }
+
+  const raElement = document.querySelector(".aluno-ra");
+  if (raElement) {
+    raElement.textContent = `RA: ${aluno.ra}`;
+  }
+}
+
+async function loadOficinasDoAluno() {
+  try {
+    const userData = userSession.get();
+    const oficinas = await oficinasAPI.listar();
+
+    const oficinasDoAluno = oficinas.filter((oficina) =>
+      oficina.alunos.some((aluno) => aluno._id === userData._id)
+    );
+
+    const oficinaCountElement = document.querySelector(
+      ".card:first-child .card-count"
+    );
+    if (oficinaCountElement) {
+      oficinaCountElement.textContent = oficinasDoAluno.length;
+    }
+
+    updateOficinasTable(oficinasDoAluno);
+  } catch (error) {
+    console.error("Erro ao carregar oficinas:", error);
+    showMessage("Erro ao carregar oficinas", "error");
+  }
+}
+
+function updateOficinasTable(oficinas) {
+  const tableBody = document.querySelector(".table tbody");
+  if (!tableBody) return;
+
+  tableBody.innerHTML = "";
+
+  if (oficinas.length === 0) {
+    const row = document.createElement("tr");
+    row.innerHTML =
+      '<td colspan="3" style="text-align: center;">Nenhuma oficina encontrada</td>';
+    tableBody.appendChild(row);
+    return;
+  }
+
+  oficinas.forEach((oficina) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+            <td>${oficina.nome}</td>
+            <td>${oficina.alunos.length} participantes</td>
+            <td>
+                <button class="btn btn-sm btn-primary" onclick="verDetalhesOficina('${oficina._id}')">
+                    Ver Detalhes
+                </button>
+            </td>
+        `;
+    tableBody.appendChild(row);
+  });
+}
+
+async function verDetalhesOficina(oficinaId) {
+  try {
+    const oficina = await oficinasAPI.buscarPorId(oficinaId);
+
+    showOficinaDetails(oficina);
+  } catch (error) {
+    console.error("Erro ao carregar detalhes da oficina:", error);
+    showMessage("Erro ao carregar detalhes da oficina", "error");
+  }
+}
+
+function showOficinaDetails(oficina) {
+  const modal = document.createElement("div");
+  modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    `;
+
+  modal.innerHTML = `
+        <div style="background: white; padding: 20px; border-radius: 8px; max-width: 500px; width: 90%;">
+            <h3>Detalhes da Oficina</h3>
+            <p><strong>Nome:</strong> ${oficina.nome}</p>
+            <p><strong>ID:</strong> ${oficina.id}</p>
+            <p><strong>Total de Participantes:</strong> ${
+              oficina.alunos.length
+            }</p>
+            <h4>Participantes:</h4>
+            <ul>
+                ${oficina.alunos
+                  .map(
+                    (aluno) => `
+                    <li>${aluno.user?.email || "Email não disponível"} - RA: ${
+                      aluno.ra
+                    } - Período: ${aluno.periodo}</li>
+                `
+                  )
+                  .join("")}
+            </ul>
+            <button onclick="this.parentElement.parentElement.remove()" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                Fechar
+            </button>
+        </div>
+    `;
+
+  document.body.appendChild(modal);
+
+  modal.addEventListener("click", function (e) {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+}
+
+function logout() {
+  if (confirm("Tem certeza que deseja sair?")) {
+    userSession.clear();
+    showMessage("Logout realizado com sucesso!", "success");
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 1000);
+  }
+}

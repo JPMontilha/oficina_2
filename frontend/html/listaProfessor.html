@@ -12,10 +12,11 @@
             <div class="logo">SisGestão Acadêmica</div>
             <nav>
                 <ul>
-                    <li><a href="#">Início</a></li>
-                    <li><a href="#">Oficina</a></li>
-                    <li><a href="#">Alunos</a></li>
-                    <li><a href="#" class="active">Professores</a></li>
+                    <li><a href="/professor">Início</a></li>
+                    <li><a href="/oficinas">Oficinas</a></li>
+                    <li><a href="/alunos">Alunos</a></li>
+                    <li><a href="/professores" class="active">Professores</a></li>
+                    <li><a href="#" onclick="logout()">Sair</a></li>
                 </ul>
             </nav>
         </div>
@@ -27,6 +28,7 @@
         <div class="card">
             <div class="search-container">
                 <input type="text" id="search-professores" class="form-control" placeholder="Pesquisar professores...">
+                <button class="btn btn-success" onclick="openAddModal()">Novo Professor</button>
             </div>
             
             <div class="table-container">
@@ -37,38 +39,87 @@
                             <th>Nome</th>
                             <th>Email</th>
                             <th>Área</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>PROF001</td>
-                            <td>Carlos Oliveira</td>
-                            <td>carlos.oliveira@email.com</td>
-                            <td>Inteligência Artificial</td>
-                        </tr>
-                        <tr>
-                            <td>PROF002</td>
-                            <td>Marina Santos</td>
-                            <td>marina.santos@email.com</td>
-                            <td>Programação Web</td>
-                        </tr>
-                        <tr>
-                            <td>PROF003</td>
-                            <td>Ana Silva</td>
-                            <td>ana.silva@email.com</td>
-                            <td>Metodologia Científica</td>
-                        </tr>
-                        <tr>
-                            <td>PROF004</td>
-                            <td>Ricardo Pereira</td>
-                            <td>ricardo.pereira@email.com</td>
-                            <td>Banco de Dados</td>
-                        </tr>
+                        <!-- Dados carregados dinamicamente via JavaScript -->
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
+
+    </main>
+
+    <!-- Modal para editar professor -->
+    <div id="editModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Professor</h2>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <input type="hidden" id="editProfessorId">
+                    <div class="form-group">
+                        <label for="editCodigo">Código:</label>
+                        <input type="text" id="editCodigo" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editNome">Nome:</label>
+                        <input type="text" id="editNome" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEmail">Email:</label>
+                        <input type="email" id="editEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editArea">Área:</label>
+                        <input type="text" id="editArea" class="form-control" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar novo professor -->
+    <div id="addModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Novo Professor</h2>
+                <span class="close" onclick="closeAddModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="addForm">
+                    <div class="form-group">
+                        <label for="addCodigo">Código:</label>
+                        <input type="text" id="addCodigo" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addNome">Nome:</label>
+                        <input type="text" id="addNome" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addEmail">Email:</label>
+                        <input type="email" id="addEmail" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="addArea">Área:</label>
+                        <input type="text" id="addArea" class="form-control" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeAddModal()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Criar Professor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <div class="container footer-content">
@@ -77,6 +128,7 @@
         </div>
     </footer>
 
+    <script src="../script/api.js"></script>
     <script src="../script/professores.js"></script>
 </body>
 </html>

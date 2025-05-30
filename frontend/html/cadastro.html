@@ -1,81 +1,138 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sistema de Registro de Eventos Acadêmicos</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/cadastro-extra.css">
-</head>
-<body>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
     <header>
-        <div class="container header-content">
-            <div class="logo">SisGestão Acadêmica</div>
-        </div>
+      <div class="container header-content">
+        <div class="logo">SisGestão Acadêmica</div>
+      </div>
     </header>
 
     <main>
-        <div class="container">
-            <h1 class="page-title">Sistema de Registro de Eventos Acadêmicos</h1>
-            
-            <div class="card">
-                <h2 class="card-title cadastro-title">Cadastro de Usuário</h2>
-                
-                <div id="success-message" class="success-message">
-                    Usuário cadastrado com sucesso!
-                </div>
-                
-                <div id="error-message" class="error-message">
-                    Por favor, preencha todos os campos obrigatórios.
-                </div>
-                
-                <form id="cadastro-form">
-                    <div class="form-group">
-                        <label class="form-label" for="user-email">Email *</label>
-                        <input type="email" class="form-control" id="user-email" placeholder="Digite seu email" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="user-senha">Senha *</label>
-                        <input type="password" class="form-control" id="user-senha" placeholder="Digite sua senha" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="user-confirm-senha">Confirmar Senha *</label>
-                        <input type="password" class="form-control" id="user-confirm-senha" placeholder="Confirme sua senha" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="user-id">Código *</label>
-                        <input type="number" class="form-control" id="user-id" placeholder="Digite o código de identificação" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="user-tipo">Tipo de Usuário *</label>
-                        <select class="form-control" id="user-tipo" required>
-                            <option value="">Selecione um tipo</option>
-                            <option value="aluno">Aluno</option>
-                            <option value="professor">Professor</option>
-                        </select>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-success btn-full">Cadastrar Usuário</button>
-                </form>
-                
-                <div class="form-links">
-                    <p>Já possui uma conta? <a href="login.html">Fazer login</a></p>
-                </div>
+      <div class="container">
+        <h1 class="page-title">Sistema de Registro de Eventos Acadêmicos</h1>
+
+        <div class="card">
+          <h2 class="card-title cadastro-title">Cadastro de Usuário</h2>
+
+          <form id="cadastroForm">
+            <div class="form-group">
+              <label class="form-label" for="cadastro-email">Email *</label>
+              <input
+                type="email"
+                class="form-control"
+                id="cadastro-email"
+                placeholder="Digite seu email"
+                required
+              />
             </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cadastro-senha">Senha *</label>
+              <input
+                type="password"
+                class="form-control"
+                id="cadastro-senha"
+                placeholder="Digite sua senha"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="confirmar-senha"
+                >Confirmar Senha *</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="confirmar-senha"
+                placeholder="Confirme sua senha"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Tipo de Usuário *</label>
+              <div class="radio-group">
+                <label class="radio-container">
+                  <input type="radio" name="tipo" value="aluno" required />
+                  <span class="radio-checkmark"></span>
+                  Aluno
+                </label>
+                <label class="radio-container">
+                  <input type="radio" name="tipo" value="professor" required />
+                  <span class="radio-checkmark"></span>
+                  Professor
+                </label>
+              </div>
+            </div>
+
+            <!-- Campos específicos para aluno -->
+            <div id="campos-aluno" style="display: none">
+              <div class="form-group">
+                <label class="form-label" for="ra">RA *</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="ra"
+                  placeholder="Digite seu RA"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="periodo">Período *</label>
+                <select class="form-control" id="periodo">
+                  <option value="">Selecione o período</option>
+                  <option value="1">1º Período</option>
+                  <option value="2">2º Período</option>
+                  <option value="3">3º Período</option>
+                  <option value="4">4º Período</option>
+                  <option value="5">5º Período</option>
+                  <option value="6">6º Período</option>
+                  <option value="7">7º Período</option>
+                  <option value="8">8º Período</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Campos específicos para professor -->
+            <div id="campos-professor" style="display: none">
+              <div class="form-group">
+                <label class="form-label" for="idP">ID do Professor *</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="idP"
+                  placeholder="Digite o ID do professor"
+                />
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-full">
+              Cadastrar Usuário
+            </button>
+          </form>
+
+          <div class="form-links">
+            <p>Já possui uma conta? <a href="/login">Fazer login</a></p>
+          </div>
         </div>
+      </div>
     </main>
 
     <footer>
-        <div class="container footer-content">
-            <p>&copy; 2025 SisGestão Acadêmica | Sistema de Registro de Eventos</p>
-            <p>Todos os direitos reservados</p>
-        </div>
+      <div class="container footer-content">
+        <p>&copy; 2025 SisGestão Acadêmica | Sistema de Registro de Eventos</p>
+        <p>Todos os direitos reservados</p>
+      </div>
     </footer>
 
+    <script src="../script/api.js"></script>
+    <script src="../script/cadastro.js"></script>
     <script src="../script/validator.js"></script>
-</body>
+  </body>
 </html>

@@ -1,139 +1,267 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Meus Dados - Sistema Acadêmico</title>
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
     <header>
-        <div class="container header-content">
-            <div class="logo">SisGestão Acadêmica</div>
-            <nav>
-                <ul>
-                    <li><a href="alunoMain.html">Início</a></li>
-                    <li><a href="#">Oficina</a></li>
-                    <li><a href="#">Alunos</a></li>
-                    <li><a href="#">Professores</a></li>
-                    <li><a href="alunoDados.html" class="active">Meus Dados</a></li>
-                </ul>
-            </nav>
-        </div>
+      <div class="container header-content">
+        <div class="logo">SisGestão Acadêmica</div>
+        <nav>
+          <ul>
+            <li><a href="/aluno">Início</a></li>
+            <li><a href="/oficinas">Oficinas</a></li>
+            <li><a href="/alunos">Alunos</a></li>
+            <li><a href="/professores">Professores</a></li>
+            <li><a href="/dados-aluno" class="active">Meus Dados</a></li>
+            <li><a href="#" onclick="logout()">Sair</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
 
     <main class="container">
-        <h1 class="page-title">Meus Dados</h1>
-        
-        <div class="dashboard">
-            <div class="card">
-                <h2 class="card-title">Informações Pessoais</h2>
-                <div class="user-info">
-                    <div class="info-group">
-                        <span class="info-label">Nome:</span>
-                        <span class="info-value">João da Silva</span>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">Código:</span>
-                        <span class="info-value">AL2025001</span>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">E-mail:</span>
-                        <span class="info-value">joao.silva@escola.edu</span>
-                    </div>
-                    <div class="info-group">
-                        <span class="info-label">Senha:</span>
-                        <span class="info-value">••••••••</span>
-                        <button class="btn btn-primary btn-small">Alterar</button>
-                    </div>
-                </div>
+      <h1 class="page-title">Meus Dados</h1>
+
+      <div class="dashboard">
+        <div class="card">
+          <h2 class="card-title">Informações Pessoais</h2>
+          <div class="user-info">
+            <div class="info-group">
+              <span class="info-label">Nome:</span>
+              <span class="info-value" id="user-name">Carregando...</span>
             </div>
-            
-            <div class="card">
-                <h2 class="card-title">Período Acadêmico</h2>
-                <div class="info-group">
-                    <span class="info-label">Período Atual:</span>
-                    <span class="info-value">1º Período</span>
-                </div>
-                <div class="info-group">
-                    <span class="info-label">Status:</span>
-                    <span class="info-value status-active">Ativo</span>
-                </div>
+            <div class="info-group">
+              <span class="info-label">RA:</span>
+              <span class="info-value" id="user-ra">Carregando...</span>
             </div>
+            <div class="info-group">
+              <span class="info-label">E-mail:</span>
+              <span class="info-value" id="user-email">Carregando...</span>
+            </div>
+            <div class="info-group">
+              <span class="info-label">Senha:</span>
+              <span class="info-value">••••••••</span>
+              <button
+                class="btn btn-primary btn-small"
+                onclick="openEditModal()"
+              >
+                Alterar
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div class="card" style="margin-top: 2rem;">
-            <h2 class="card-title">Oficinas Participantes</h2>
-            <div class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Oficina</th>
-                            <th>Professor</th>
-                            <th>Dias</th>
-                            <th>Horário</th>
-                            <th>Sala</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Programação Web</td>
-                            <td>Marina Santos</td>
-                            <td>Segunda e Quarta</td>
-                            <td>14:00 - 16:00</td>
-                            <td>Lab. Informática 3</td>
-                        </tr>
-                        <tr>
-                            <td>Inteligência Artificial</td>
-                            <td>Carlos Oliveira</td>
-                            <td>Terça e Quinta</td>
-                            <td>10:00 - 12:00</td>
-                            <td>Sala 204</td>
-                        </tr>
-                        <tr>
-                            <td>Robótica Educacional</td>
-                            <td>Ana Silva</td>
-                            <td>Sexta</td>
-                            <td>08:00 - 12:00</td>
-                            <td>Lab. Robótica</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="card">
+          <h2 class="card-title">Período Acadêmico</h2>
+          <div class="info-group">
+            <span class="info-label">Período Atual:</span>
+            <span class="info-value" id="user-periodo">Carregando...</span>
+          </div>
+          <div class="info-group">
+            <span class="info-label">Status:</span>
+            <span class="info-value status-active">Ativo</span>
+          </div>
         </div>
+      </div>
+
+      <div class="card" style="margin-top: 2rem">
+        <h2 class="card-title">Oficinas Participantes</h2>
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Oficina</th>
+                <th>Professor</th>
+                <th>Dias</th>
+                <th>Horário</th>
+                <th>Sala</th>
+              </tr>
+            </thead>
+            <tbody id="oficinas-tbody">
+              <!-- Dados carregados dinamicamente via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </main>
 
     <footer>
-        <div class="container footer-content">
-            <p>&copy; 2025 SisGestão Acadêmica | Sistema de Registro de Eventos</p>
-            <p>Todos os direitos reservados</p>
-        </div>
+      <div class="container footer-content">
+        <p>&copy; 2025 SisGestão Acadêmica | Sistema de Registro de Eventos</p>
+        <p>Todos os direitos reservados</p>
+      </div>
     </footer>
-    
+
     <div id="edit-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Alterar Dados</h2>
-            <form id="edit-form" class="edit-form">
-                <div class="form-group">
-                    <label for="edit-email" class="form-label">Novo E-mail:</label>
-                    <input type="email" id="edit-email" class="form-control" placeholder="Digite seu novo e-mail">
-                </div>
-                <div class="form-group">
-                    <label for="edit-senha" class="form-label">Nova Senha:</label>
-                    <input type="password" id="edit-senha" class="form-control" placeholder="Digite sua nova senha">
-                </div>
-                <div class="form-group">
-                    <label for="edit-confirm-senha" class="form-label">Confirmar Nova Senha:</label>
-                    <input type="password" id="edit-confirm-senha" class="form-control" placeholder="Confirme sua nova senha">
-                </div>
-                <div id="edit-error-message" class="error-message" style="display: none;"></div>
-                <div id="edit-success-message" class="success-message" style="display: none;"></div>
-                <button type="submit" class="btn btn-primary btn-full">Salvar Alterações</button>
-            </form>
-        </div>
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Alterar Dados</h2>
+        <form id="edit-form" class="edit-form">
+          <div class="form-group">
+            <label for="edit-email" class="form-label">Novo E-mail:</label>
+            <input
+              type="email"
+              id="edit-email"
+              class="form-control"
+              placeholder="Digite seu novo e-mail"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit-senha" class="form-label">Nova Senha:</label>
+            <input
+              type="password"
+              id="edit-senha"
+              class="form-control"
+              placeholder="Digite sua nova senha"
+            />
+          </div>
+          <div class="form-group">
+            <label for="edit-confirm-senha" class="form-label"
+              >Confirmar Nova Senha:</label
+            >
+            <input
+              type="password"
+              id="edit-confirm-senha"
+              class="form-control"
+              placeholder="Confirme sua nova senha"
+            />
+          </div>
+          <div
+            id="edit-error-message"
+            class="error-message"
+            style="display: none"
+          ></div>
+          <div
+            id="edit-success-message"
+            class="success-message"
+            style="display: none"
+          ></div>
+          <button type="submit" class="btn btn-primary btn-full">
+            Salvar Alterações
+          </button>
+        </form>
+      </div>
     </div>
 
+    <script src="../script/api.js"></script>
     <script src="../script/validator.js"></script>
-</body>
+    <script>
+      // Função para carregar dados do aluno
+      async function loadStudentData() {
+        if (!requireLogin()) return;
+
+        try {
+          if (!userSession.isLoggedIn()) {
+            showMessage("Sessão expirada. Faça login novamente.", "error");
+            setTimeout(() => {
+              window.location.href = "/login";
+            }, 2000);
+            return;
+          }
+
+          const user = userSession.get();
+          if (!user || !user.email) {
+            showMessage("Dados de usuário inválidos", "error");
+            setTimeout(() => {
+              window.location.href = "/login";
+            }, 2000);
+            return;
+          }
+
+          const aluno = await alunosAPI.buscarPorEmail(user.email);
+          if (!aluno) {
+            showMessage("Aluno não encontrado", "error");
+            return;
+          }
+
+          // Preencher dados pessoais
+          document.getElementById("user-name").textContent =
+            user.email.split("@")[0];
+          document.getElementById("user-ra").textContent = aluno.ra || "N/A";
+          document.getElementById("user-email").textContent = user.email;
+          document.getElementById("user-periodo").textContent = `${
+            aluno.periodo || 1
+          }º Período`;
+
+          // Carregar oficinas do aluno
+          loadStudentWorkshops(aluno.oficinas || []);
+        } catch (error) {
+          console.error("Erro ao carregar dados do aluno:", error);
+          showMessage("Erro ao carregar dados do aluno", "error");
+        }
+      }
+
+      // Função para carregar oficinas do aluno
+      function loadStudentWorkshops(oficinas) {
+        const tbody = document.getElementById("oficinas-tbody");
+        tbody.innerHTML = "";
+
+        if (!oficinas || oficinas.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="5">Nenhuma oficina encontrada</td></tr>';
+          return;
+        }
+
+        oficinas.forEach((oficina) => {
+          const row = tbody.insertRow();
+          row.innerHTML = `
+                    <td>${oficina.nome}</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                `;
+        });
+      }
+
+      // Função para abrir modal de edição
+      function openEditModal() {
+        document.getElementById("edit-modal").classList.remove("hidden");
+      }
+
+      // Função para fechar modal de edição
+      function closeEditModal() {
+        document.getElementById("edit-modal").classList.add("hidden");
+      }
+
+      // Função de logout
+      function logout() {
+        if (confirm("Tem certeza que deseja sair?")) {
+          userSession.clear();
+          showMessage("Logout realizado com sucesso!", "success");
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 1000);
+        }
+      }
+
+      // Função para mostrar mensagens
+      function showMessage(message, type) {
+        const messageDiv =
+          type === "error"
+            ? document.getElementById("edit-error-message")
+            : document.getElementById("edit-success-message");
+
+        if (messageDiv) {
+          messageDiv.textContent = message;
+          messageDiv.style.display = "block";
+          setTimeout(() => {
+            messageDiv.style.display = "none";
+          }, 3000);
+        }
+      }
+
+      // Fechar modal ao clicar no X
+      document
+        .querySelector(".close-modal")
+        .addEventListener("click", closeEditModal);
+
+      // Carregar dados quando a página carregar
+      document.addEventListener("DOMContentLoaded", loadStudentData);
+    </script>
+  </body>
 </html>

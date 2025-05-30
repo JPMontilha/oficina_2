@@ -1,14 +1,16 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const professorController = require('../controllers/professorController');
+const professorController = require("../controllers/professorController");
 
 // Rota de criação de professor
-router.post('/', professorController.criarProfessor);
+router.post("/", professorController.criarProfessor);
 // Rota de listagem de professores
-router.get('/', professorController.listarProfessores);
+router.get("/", professorController.listarProfessores);
+// Rota de busca de professor por ID
+router.get("/:id", professorController.buscarProfessorPorId);
 // Rota de atualização de professor
-router.put('/:id', professorController.atualizarProfessor);
+router.put("/:id", professorController.atualizarProfessor);
 // Rota de deleção de professor
-router.delete('/:id', professorController.deletarProfessor);
+router.delete("/:id", professorController.deletarProfessor);
 
 module.exports = router;
