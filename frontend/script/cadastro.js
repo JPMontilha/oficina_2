@@ -79,6 +79,7 @@ async function handleCadastro(event) {
       }
 
       dadosUsuario.idP = parseInt(idP);
+      // A matrícula será gerada automaticamente pelo schema
       dadosUsuario.oficinas = [];
 
       const response = await professoresAPI.criar(dadosUsuario);

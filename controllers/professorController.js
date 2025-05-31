@@ -77,10 +77,39 @@ async function deletarProfessor(req, res) {
   }
 }
 
+async function adicionarOficina(req, res) {
+  try {
+    const { professorId, oficinaId } = req.params;
+    
+    // Verificar se o professor existe
+    const professor = await Professor.findById(professorId);
+    if (!professor) {
+      return res.status(404).json({ erro: "Professor não encontrado" });
+    }
+
+    // Adicionar oficina ao professor (evitando duplicatas)
+    if (!professor.oficinas.includes(oficinaId)) {
+      professor.oficinas.push(oficinaId);
+      await professor.save();
+    }
+
+    res.json({
+      success: true,
+      professor: await Professor.findById(professorId)
+        .populate("oficinas")
+        .select("-user.senha")
+    });
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
+  }
+}
+
+// Adicione ao exports no final do arquivo:
 module.exports = {
   criarProfessor,
   listarProfessores,
   buscarProfessorPorId,
   atualizarProfessor,
   deletarProfessor,
+  adicionarOficina 
 };
