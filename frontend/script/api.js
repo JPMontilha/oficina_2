@@ -1,13 +1,25 @@
-const API_BASE_URL = "/api";
+const API_BASE_URL = "http://localhost:3000/api";
 
 async function makeRequest(url, options = {}) {
+  const userData = userSession.get();
+  const token = userData ? userData.token : null;
+
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {}),
+  };
+
+  // Se houver token e ainda não foi enviado no headers, adiciona
+  if (token && !headers["Authorization"]) {
+    headers["Authorization"] = "Bearer " + token;
+  }
+
   try {
+    console.log("Fazendo requisição para:", url, "com opções:", options);
+    console.log("Headers:", headers);
     const response = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
       ...options,
+      headers,
     });
 
     const data = await response.json();
@@ -138,6 +150,27 @@ const professoresAPI = {
       method: "DELETE",
     });
   },
+
+  async adicionarOficina(professorId, oficinaId) {
+    // 1. Buscar o professor atual
+    const professor = await professoresAPI.buscarPorId(professorId);
+
+    if (!professor) throw new Error("Professor não encontrado");
+
+    // 2. Pegar as oficinas atuais, adicionar a nova se não estiver lá
+    const oficinasAtuais = professor.oficinas || [];
+    if (!oficinasAtuais.includes(oficinaId)) {
+      oficinasAtuais.push(oficinaId);
+    }
+
+  // 3. Enviar atualização com o array atualizado
+  const professorAtualizado = await professoresAPI.atualizar(professorId, {
+    oficinas: oficinasAtuais,
+  });
+
+  return professorAtualizado;
+}
+
 };
 
 const userSession = {

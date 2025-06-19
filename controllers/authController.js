@@ -1,13 +1,13 @@
 const bcrypt = require("bcrypt");
 const Aluno = require("../models/aluno");
 const Professor = require("../models/professor");
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Login de usuário (aluno ou professor)
 async function login(req, res) {
   try {
     const { email, senha, tipo } = req.body;
-
-    console.log(`Tentativa de login - Email: ${email}, Tipo: ${tipo}`);
 
     if (!email || !senha || !tipo) {
       return res
@@ -18,51 +18,28 @@ async function login(req, res) {
     let usuario = null;
 
     if (tipo === "aluno") {
-      console.log("Buscando aluno...");
       usuario = await Aluno.findOne({ "user.email": email });
     } else if (tipo === "professor") {
-      console.log("Buscando professor...");
-      usuario = await Professor.findOne({ "user.email": email }).populate(
-        "oficinas"
-      );
+      usuario = await Professor.findOne({ "user.email": email }).populate("oficinas");
     } else {
       return res.status(400).json({ erro: "Tipo de usuário inválido" });
     }
 
     if (!usuario) {
-      console.log("Usuário não encontrado");
       return res.status(401).json({ erro: "Credenciais inválidas" });
     }
 
-    console.log("Usuário encontrado, verificando senha...");
-    console.log("Senha do banco:", usuario.user.senha);
-    console.log("Senha digitada:", senha);
-
-    // Verificar senha - primeiro tentar comparação direta (texto plano)
-    let senhaValida = false;
-
-    if (usuario.user.senha === senha) {
-      senhaValida = true;
-      console.log("Senha válida (texto plano)");
-    } else {
-      // Se não for texto plano, tentar bcrypt
-      try {
-        senhaValida = await bcrypt.compare(senha, usuario.user.senha);
-        console.log("Senha válida (bcrypt)");
-      } catch (error) {
-        console.log("Erro ao verificar senha com bcrypt:", error.message);
-        senhaValida = false;
-      }
-    }
-
+    const senhaValida = await bcrypt.compare(senha, usuario.user.senha);
     if (!senhaValida) {
-      console.log("Senha inválida");
       return res.status(401).json({ erro: "Credenciais inválidas" });
     }
 
-    console.log("Login bem-sucedido");
+    const token = jwt.sign(
+      { id: usuario._id, tipo: tipo }, // payload
+      JWT_SECRET,
+      { expiresIn: '2h' }
+    );
 
-    // Retornar dados do usuário (sem a senha)
     const usuarioResponse = {
       _id: usuario._id,
       email: usuario.user.email,
@@ -77,9 +54,10 @@ async function login(req, res) {
       usuarioResponse.oficinas = usuario.oficinas;
     }
 
-    res.json({
+    return res.json({
       sucesso: true,
       usuario: usuarioResponse,
+      token: token, // Aqui você retorna o token para o frontend guardar
     });
   } catch (err) {
     console.error("Erro no login:", err);

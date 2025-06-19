@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function handleLogin(event) {
+  console.log("Login form submitted");
   event.preventDefault();
 
   const formData = new FormData(event.target);
@@ -39,7 +40,10 @@ async function handleLogin(event) {
 
     if (response.sucesso) {
       // Salvar dados do usuário
-      userSession.save(response.usuario);
+      userSession.save({
+        ...response.usuario,
+        token: response.token,
+      });
 
       showMessage("Login realizado com sucesso!", "success");
 

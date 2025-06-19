@@ -34,9 +34,13 @@ async function seed() {
 
     console.log("Criando oficina...");
 
-    const oficina = await axios.post(`${BASE_URL}/oficinas`, {
+    const oficina = await axios.post(`${BASE_URL}/oficinas/teste`, {
       id: 1,
       nome: "Oficina de Lógica",
+      tipo: "Workshop",
+      data: new Date(),
+      local: "Sala 101",
+      descricao: "Oficina introdutória à lógica de programação.",
       alunos: [aluno1.data._id, aluno2.data._id, aluno3.data._id],
     });
 

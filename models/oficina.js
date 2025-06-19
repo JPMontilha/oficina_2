@@ -18,11 +18,6 @@ const oficinaSchema = new mongoose.Schema({
     required: true
   },
   descricao: String,
-  responsavel: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Professor',
-    required: true
-  },
   alunos: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Aluno',

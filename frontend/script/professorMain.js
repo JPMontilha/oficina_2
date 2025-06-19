@@ -508,7 +508,7 @@ function setupCadastroForm(professor) {
             row.dataset.id = oficinaCriada._id;
             row.innerHTML = `
                 <td>${oficinaCriada.nome}</td>
-                <td>${capitalizeFirstLetter(oficinaCriada.tipo)}</td>
+                <td>${oficinaCriada.tipo}</td>
                 <td>${formatarData(oficinaCriada.data)}</td>
                 <td>${oficinaCriada.local}</td>
                 <td>Você</td>
