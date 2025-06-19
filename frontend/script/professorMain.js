@@ -379,12 +379,11 @@ document.addEventListener("DOMContentLoaded", async function() {
     try {
         // Carregar dados do professor e oficinas
         const professor = await professoresAPI.buscarPorId(userData._id);
+        console.log("Dados do professor:", professor);
         const todasOficinas = await oficinasAPI.listar();
         
         // Filtrar apenas as oficinas deste professor
-        const minhasOficinas = todasOficinas.filter(oficina => 
-            oficina.responsavel && oficina.responsavel._id === professor._id
-        );
+        const minhasOficinas = professor.oficinas || [];
 
         // Atualizar dashboard
         updateDashboard(todasOficinas, minhasOficinas);
