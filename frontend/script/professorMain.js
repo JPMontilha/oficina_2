@@ -418,17 +418,21 @@ function updateDashboard(todasOficinas, minhasOficinas) {
     }
 
     // Total de professores envolvidos
-    const professoresUnicos = new Set();
-    todasOficinas.forEach(oficina => {
-        if (oficina.responsavel && oficina.responsavel._id) {
-            professoresUnicos.add(oficina.responsavel._id);
+    const professoresElement = document.querySelector(".card:nth-child(3) .card-count");
+
+    professoresAPI.listar().then(professores => {
+        // Filtra professores que possuem oficinas não vazias
+        const professoresComOficinas = professores.filter(professor => {
+            return professor.oficinas && Array.isArray(professor.oficinas) && professor.oficinas.length > 0;
+        });
+
+        const quantidade = professoresComOficinas.length;
+        console.log("Quantidade de professores com oficinas:", quantidade);
+
+        if (professoresElement) {
+            professoresElement.textContent = quantidade;
         }
     });
-    
-    const professoresElement = document.querySelector(".card:nth-child(3) .card-count");
-    if (professoresElement) {
-        professoresElement.textContent = professoresUnicos.size;
-    }
 }
 
 // Atualiza a tabela de oficinas
