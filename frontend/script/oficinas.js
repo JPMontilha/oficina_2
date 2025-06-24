@@ -72,31 +72,23 @@ async function loadOficinas() {
       return;
     }
 
-    oficinas.forEach((oficina) => {
+    for (const oficina of oficinas) {
       const row = tbody.insertRow();
+
+
       row.innerHTML = `
-                <td>${oficina.id || "N/A"}</td>
-                <td>${oficina.nome || "N/A"}</td>
-                <td>${oficina.alunos ? oficina.alunos.length : 0}</td>
-                <td>
-                    <button class="btn btn-primary btn-sm" onclick="verDetalhes('${
-                      oficina._id
-                    }')">
-                        Ver Detalhes
-                    </button>
-                    <button class="btn btn-warning btn-sm" onclick="editarOficina('${
-                      oficina._id
-                    }')">
-                        Editar
-                    </button>
-                    <button class="btn btn-danger btn-sm" onclick="deletarOficina('${
-                      oficina._id
-                    }')">
-                        Excluir
-                    </button>
-                </td>
-            `;
-    });
+        <td>${oficina.nome || "Sem nome"}</td>
+        <td>${oficina.tipo || "Não especificado"}</td>
+        <td>${formatarData(oficina.data)}</td>
+        <td>${oficina.local || "Não especificado"}</td>
+        <td>${oficina.alunos?.length || 0}</td>
+        <td>
+            <button class="btn btn-primary btn-sm" onclick="verDetalhes('${oficina._id}')">
+                Ver Detalhes
+            </button>
+        </td>
+      `;
+    }
 
     showMessage(
       `${oficinas.length} oficina(s) carregada(s) com sucesso`,
@@ -132,35 +124,6 @@ async function verDetalhes(oficinaId) {
     console.error("Erro ao carregar detalhes da oficina:", error);
     showMessage("Erro ao carregar detalhes da oficina", "error");
   }
-}
-
-async function editarOficina(oficinaId) {
-  try {
-    const oficina = await oficinasAPI.buscarPorId(oficinaId);
-
-    // Preencher o formulário de edição
-    document.getElementById("editOficinaId").value = oficina._id;
-    document.getElementById("editNome").value = oficina.nome;
-    document.getElementById("editId").value = oficina.id;
-
-    document.getElementById("editModal").style.display = "block";
-  } catch (error) {
-    console.error("Erro ao carregar dados da oficina:", error);
-    showMessage("Erro ao carregar dados da oficina", "error");
-  }
-}
-
-function closeEditModal() {
-  document.getElementById("editModal").style.display = "none";
-}
-
-function openAddModal() {
-  document.getElementById("addModal").style.display = "block";
-}
-
-function closeAddModal() {
-  document.getElementById("addModal").style.display = "none";
-  document.getElementById("addForm").reset();
 }
 
 async function handleEditSubmit(event) {
@@ -262,4 +225,16 @@ async function deletarOficina(oficinaId) {
     console.error("Erro ao excluir oficina:", error);
     showMessage("Erro ao excluir oficina. Tente novamente.", "error");
   }
+}
+
+// Funções auxiliares
+function formatarData(dataString) {
+    if (!dataString) return "Não especificada";
+    
+    try {
+        const data = new Date(dataString);
+        return data.toLocaleDateString('pt-BR');
+    } catch {
+        return dataString;
+    }
 }

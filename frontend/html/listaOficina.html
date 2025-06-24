@@ -34,18 +34,17 @@
             class="form-control"
             placeholder="Pesquisar oficinas..."
           />
-          <button class="btn btn-success" onclick="openAddModal()">
-            Nova Oficina
-          </button>
         </div>
 
         <div class="table-container">
           <table class="table" id="oficinas-table">
             <thead>
               <tr>
-                <th>ID</th>
                 <th>Nome</th>
-                <th>Alunos Inscritos</th>
+                <th>Tipo</th>
+                <th>Data</th>
+                <th>Local</th>
+                <th>Participantes</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -85,40 +84,6 @@
               </button>
               <button type="submit" class="btn btn-primary">
                 Salvar Alterações
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal para adicionar nova oficina -->
-    <div id="addModal" class="modal" style="display: none">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Nova Oficina</h2>
-          <span class="close" onclick="closeAddModal()">&times;</span>
-        </div>
-        <div class="modal-body">
-          <form id="addForm">
-            <div class="form-group">
-              <label for="addNome">Nome da Oficina:</label>
-              <input type="text" id="addNome" class="form-control" required />
-            </div>
-            <div class="form-group">
-              <label for="addId">ID da Oficina:</label>
-              <input type="text" id="addId" class="form-control" required />
-            </div>
-            <div class="modal-actions">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                onclick="closeAddModal()"
-              >
-                Cancelar
-              </button>
-              <button type="submit" class="btn btn-primary">
-                Criar Oficina
               </button>
             </div>
           </form>

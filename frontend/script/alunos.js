@@ -7,7 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
   searchInput = document.getElementById("search-alunos");
   alunosTable = document.getElementById("alunos-table");
   const toggleModeBtn = document.getElementById("toggle-mode");
+
   const saveButton = document.createElement("button");
+  saveButton.textContent = "Salvar Períodos";
+  saveButton.className = "btn btn-success";
+  saveButton.style.marginTop = "1rem";
+  saveButton.style.display = "none";
+  document.querySelector(".card").appendChild(saveButton);
 
   if (!searchInput || !alunosTable || !toggleModeBtn) {
     console.error("Elementos essenciais não encontrados na página");
@@ -20,13 +26,29 @@ document.addEventListener("DOMContentLoaded", function () {
     logoutButton.addEventListener("click", logout);
   }
 
-  saveButton.textContent = "Salvar Períodos";
-  saveButton.className = "btn btn-success";
-  saveButton.style.marginTop = "1rem";
-  saveButton.style.display = "none";
-  document.querySelector(".card").appendChild(saveButton);
+  let modoEdicao = false; // ✅ variável para controlar o estado de edição
 
-  loadAlunos();
+  toggleModeBtn.addEventListener("click", function () {
+    modoEdicao = !modoEdicao; // ✅ alterna o estado corretamente
+    const editPeriodColumns = document.querySelectorAll(".edit-period");
+    editPeriodColumns.forEach((col) => {
+      col.classList.toggle("hidden", !modoEdicao);
+    });
+
+    if (modoEdicao) {
+      toggleModeBtn.textContent = "Sair do Modo Edição";
+      toggleModeBtn.classList.remove("btn-primary");
+      toggleModeBtn.classList.add("btn-success");
+      saveButton.style.display = "block";
+    } else {
+      toggleModeBtn.textContent = "Modo Edição Período";
+      toggleModeBtn.classList.remove("btn-success");
+      toggleModeBtn.classList.add("btn-primary");
+      saveButton.style.display = "none";
+    }
+  });
+
+  saveButton.addEventListener("click", salvarPeriodos);
 
   searchInput.addEventListener("input", function () {
     const searchTerm = this.value.toLowerCase();
@@ -38,30 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  if (toggleModeBtn) {
-    toggleModeBtn.addEventListener("click", function () {
-      const editPeriodColumns = document.querySelectorAll(".edit-period");
-      editPeriodColumns.forEach((col) => {
-        col.classList.toggle("hidden");
-      });
-
-      if (toggleModeBtn.textContent === "Modo Edição Período") {
-        toggleModeBtn.textContent = "Sair do Modo Edição";
-        toggleModeBtn.classList.remove("btn-primary");
-        toggleModeBtn.classList.add("btn-success");
-        saveButton.style.display = "block";
-      } else {
-        toggleModeBtn.textContent = "Modo Edição Período";
-        toggleModeBtn.classList.remove("btn-success");
-        toggleModeBtn.classList.add("btn-primary");
-        saveButton.style.display = "none";
-      }
-    });
-  }
-
-  saveButton.addEventListener("click", function () {
-    salvarPeriodos();
-  });
+  loadAlunos();
 });
 
 function logout() {
@@ -98,47 +97,27 @@ async function loadAlunos() {
     alunos.forEach((aluno) => {
       const row = tbody.insertRow();
       row.innerHTML = `
-                <td>${aluno.ra || "N/A"}</td>
-                <td>${aluno.user?.email || "N/A"}</td>
-                <td>Ativo</td>
-                <td>${aluno.periodo}º Período</td>
-                <td class="edit-period hidden">
-                    <select class="period-select form-control" data-id="${
-                      aluno._id
-                    }">
-                        <option value="1" ${
-                          aluno.periodo === 1 ? "selected" : ""
-                        }>1º Período</option>
-                        <option value="2" ${
-                          aluno.periodo === 2 ? "selected" : ""
-                        }>2º Período</option>
-                        <option value="3" ${
-                          aluno.periodo === 3 ? "selected" : ""
-                        }>3º Período</option>
-                        <option value="4" ${
-                          aluno.periodo === 4 ? "selected" : ""
-                        }>4º Período</option>
-                        <option value="5" ${
-                          aluno.periodo === 5 ? "selected" : ""
-                        }>5º Período</option>
-                        <option value="6" ${
-                          aluno.periodo === 6 ? "selected" : ""
-                        }>6º Período</option>
-                        <option value="7" ${
-                          aluno.periodo === 7 ? "selected" : ""
-                        }>7º Período</option>
-                        <option value="8" ${
-                          aluno.periodo === 8 ? "selected" : ""
-                        }>8º Período</option>
-                    </select>
-                </td>
-            `;
+        <td>${aluno.ra || "N/A"}</td>
+        <td>${aluno.user?.email || "N/A"}</td>
+        <td>Ativo</td>
+        <td>${aluno.periodo}º Período</td>
+        <td class="edit-period hidden">
+          <select class="period-select form-control" data-id="${aluno._id}">
+            ${Array.from({ length: 8 }, (_, i) => i + 1)
+              .map(
+                (num) => `
+              <option value="${num}" ${
+                  aluno.periodo === num ? "selected" : ""
+                }>${num}º Período</option>
+            `
+              )
+              .join("")}
+          </select>
+        </td>
+      `;
     });
 
-    showMessage(
-      `${alunos.length} aluno(s) carregado(s) com sucesso`,
-      "success"
-    );
+    showMessage(`${alunos.length} aluno(s) carregado(s) com sucesso`, "success");
   } catch (error) {
     console.error("Erro ao carregar alunos:", error);
     showMessage("Erro ao carregar lista de alunos: " + error.message, "error");
@@ -156,15 +135,10 @@ async function salvarPeriodos() {
         const alunoId = periodoSelect.dataset.id;
         const novoPeriodo = parseInt(periodoSelect.value);
         const periodoAtualText = row.cells[3].textContent;
-        const periodoAnterior = parseInt(
-          periodoAtualText.replace("º Período", "")
-        );
+        const periodoAnterior = parseInt(periodoAtualText.replace("º Período", ""));
 
         if (novoPeriodo !== periodoAnterior) {
-          alunosAtualizados.push({
-            id: alunoId,
-            periodo: novoPeriodo,
-          });
+          alunosAtualizados.push({ id: alunoId, periodo: novoPeriodo });
         }
       }
     }
@@ -177,7 +151,7 @@ async function salvarPeriodos() {
       showMessage("Períodos atualizados com sucesso!", "success");
       await loadAlunos();
 
-      document.getElementById("toggle-mode").click();
+      document.getElementById("toggle-mode").click(); // Sai do modo edição automaticamente
     } else {
       showMessage("Nenhum período foi alterado.", "warning");
     }

@@ -36,9 +36,7 @@
                     <thead>
                         <tr>
                             <th>Código</th>
-                            <th>Nome</th>
                             <th>Email</th>
-                            <th>Área</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -51,75 +49,6 @@
     </main>
 
     </main>
-
-    <!-- Modal para editar professor -->
-    <div id="editModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Editar Professor</h2>
-                <span class="close" onclick="closeEditModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <form id="editForm">
-                    <input type="hidden" id="editProfessorId">
-                    <div class="form-group">
-                        <label for="editCodigo">Código:</label>
-                        <input type="text" id="editCodigo" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editNome">Nome:</label>
-                        <input type="text" id="editNome" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editEmail">Email:</label>
-                        <input type="email" id="editEmail" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editArea">Área:</label>
-                        <input type="text" id="editArea" class="form-control" required>
-                    </div>
-                    <div class="modal-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para adicionar novo professor -->
-    <div id="addModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Novo Professor</h2>
-                <span class="close" onclick="closeAddModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <form id="addForm">
-                    <div class="form-group">
-                        <label for="addCodigo">Código:</label>
-                        <input type="text" id="addCodigo" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="addNome">Nome:</label>
-                        <input type="text" id="addNome" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="addEmail">Email:</label>
-                        <input type="email" id="addEmail" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="addArea">Área:</label>
-                        <input type="text" id="addArea" class="form-control" required>
-                    </div>
-                    <div class="modal-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeAddModal()">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Criar Professor</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <footer>
         <div class="container footer-content">

@@ -131,6 +131,21 @@ const professoresAPI = {
     return professores.find((professor) => professor.user.email === email);
   },
 
+  async buscarPorOficina(oficinaId) {
+    const professores = await this.listar();
+
+    const professor = professores.find((professor) =>
+      professor.oficinas?.some((oficinaIdObj) => {
+        const idComparar = typeof oficinaIdObj === "string"
+          ? oficinaIdObj
+          : oficinaIdObj.toString();
+        return idComparar === oficinaId.toString();
+      })
+    );
+
+    return professor ? professor.user.email : null;
+  },
+
   async criar(dadosProfessor) {
     return makeRequest(`${API_BASE_URL}/professores`, {
       method: "POST",
@@ -169,7 +184,28 @@ const professoresAPI = {
   });
 
   return professorAtualizado;
-}
+},
+
+  async removerOficina(professorId, oficinaId) {
+    // 1. Buscar o professor atual
+    const professor = await professoresAPI.buscarPorId(professorId);
+
+    if (!professor) throw new Error("Professor não encontrado");
+
+    // 2. Pegar as oficinas atuais, remover a especificada
+    const oficinasAtuais = professor.oficinas || [];
+    const index = oficinasAtuais.indexOf(oficinaId);
+    if (index > -1) {
+      oficinasAtuais.splice(index, 1);
+    }
+
+    // 3. Enviar atualização com o array atualizado
+    const professorAtualizado = await professoresAPI.atualizar(professorId, {
+      oficinas: oficinasAtuais,
+    });
+
+    return professorAtualizado;
+  },
 
 };
 

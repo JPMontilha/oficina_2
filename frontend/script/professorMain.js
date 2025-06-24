@@ -38,20 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     <textarea class="form-control" id="edit-oficina-descricao" rows="4"></textarea>
                 </div>
                 
-                <!-- Seção de Alunos -->
-                <div class="form-group">
-                    <label class="form-label">Alunos Participantes</label>
-                    <div id="alunos-container" class="alunos-container">
-                        <!-- Lista de alunos será preenchida aqui -->
-                    </div>
-                    <div class="add-aluno-container">
-                        <select id="aluno-select" class="form-control">
-                            <option value="">Selecione um aluno</option>
-                        </select>
-                        <button type="button" id="add-aluno-btn" class="btn btn-secondary">Adicionar Aluno</button>
-                    </div>
-                </div>
-                
                 <div class="message-container">
                     <div id="edit-error-message" class="error-message" style="display: none;"></div>
                     <div id="edit-success-message" class="success-message" style="display: none;"></div>
@@ -117,52 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('edit-success-message').style.display = 'none';
     }
 
-    async function carregarAlunosParaSelecao() {
-        try {
-            const alunos = await alunosAPI.listar();
-            const select = document.getElementById('aluno-select');
-            select.innerHTML = '<option value="">Selecione um aluno</option>';
-            
-            alunos.forEach(aluno => {
-                const option = document.createElement('option');
-                option.value = aluno._id;
-                option.textContent = aluno.user?.email || aluno.nome || `Aluno ${aluno._id}`;
-                select.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Erro ao carregar alunos:', error);
-            showEditError('Erro ao carregar lista de alunos');
-        }
-    }
-
-    function renderizarAlunosParticipantes(alunos) {
-        const container = document.getElementById('alunos-container');
-        container.innerHTML = '';
-        
-        if (!alunos || alumnos.length === 0) {
-            container.innerHTML = '<p>Nenhum aluno participante</p>';
-            return;
-        }
-        
-        const lista = document.createElement('ul');
-        lista.className = 'alunos-list';
-        
-        alunos.forEach(aluno => {
-            const item = document.createElement('li');
-            item.className = 'aluno-item';
-            item.dataset.id = aluno._id || aluno;
-            
-            item.innerHTML = `
-                <span>${aluno.user?.email || aluno.nome || `Aluno ${aluno._id || aluno}`}</span>
-                <button type="button" class="btn btn-sm btn-danger remove-aluno-btn">Remover</button>
-            `;
-            
-            lista.appendChild(item);
-        });
-        
-        container.appendChild(lista);
-    }
-
     // ==============================================
     // Event Listeners
     // ==============================================
@@ -177,19 +117,17 @@ document.addEventListener('DOMContentLoaded', function() {
             // Carregar dados completos da oficina
             oficinasAPI.buscarPorId(oficinaId).then(oficina => {
                 // Preencher formulário
-                document.getElementById('edit-oficina-nome').value = oficina.nome;
-                document.getElementById('edit-oficina-tipo').value = oficina.tipo;
-                document.getElementById('edit-oficina-data').value = oficina.data.split('T')[0];
-                document.getElementById('edit-oficina-local').value = oficina.local;
+                document.getElementById('edit-oficina-nome').value = oficina.nome || '';
+                document.getElementById('edit-oficina-tipo').value = oficina.tipo || '';
+                // Corrigir o formato da data para o input type="date"
+                const dataParts = oficina.data ? oficina.data.split('T')[0] : '';
+                document.getElementById('edit-oficina-data').value = dataParts;
+                document.getElementById('edit-oficina-local').value = oficina.local || '';
                 document.getElementById('edit-oficina-descricao').value = oficina.descricao || '';
                 
-                // Carregar alunos
-                carregarAlunosParaSelecao();
-                renderizarAlunosParticipantes(oficina.alunos);
-                
-                // Armazenar IDs para referência
+                // Armazenar IDs para referência (CORRIGIDO)
                 editModal.dataset.oficinaId = oficinaId;
-                editModal.dataset.rowIndex = Array.from(row.parentNode.children).indexOf(row);
+                editModal.dataset.rowId = oficinaId; // Usando o ID para encontrar a linha depois
                 
                 // Mostrar modal
                 editModal.classList.remove('hidden');
@@ -198,64 +136,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Erro ao carregar oficina:', error);
                 showMessage('Erro ao carregar dados da oficina', 'error');
             });
-        }
-    });
-
-    // Adicionar aluno
-    document.getElementById('add-aluno-btn')?.addEventListener('click', async function() {
-        const select = document.getElementById('aluno-select');
-        const alunoId = select.value;
-        
-        if (!alunoId) {
-            showEditError('Selecione um aluno para adicionar');
-            return;
-        }
-        
-        try {
-            const oficinaId = editModal.dataset.oficinaId;
-            await oficinasAPI.adicionarAluno(oficinaId, alunoId);
-            
-            // Atualizar lista de alunos
-            const oficinaAtualizada = await oficinasAPI.buscarPorId(oficinaId);
-            renderizarAlunosParticipantes(oficinaAtualizada.alunos);
-            
-            // Atualizar contador na tabela
-            const rowIndex = editModal.dataset.rowIndex;
-            const rows = document.querySelectorAll('.table tbody tr');
-            rows[rowIndex].cells[5].textContent = oficinaAtualizada.alunos.length;
-            
-            showEditSuccess('Aluno adicionado com sucesso!');
-        } catch (error) {
-            console.error('Erro ao adicionar aluno:', error);
-            showEditError(error.message || 'Erro ao adicionar aluno');
-        }
-    });
-
-    // Remover aluno
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-aluno-btn')) {
-            const item = e.target.closest('.aluno-item');
-            const alunoId = item.dataset.id;
-            const oficinaId = editModal.dataset.oficinaId;
-            
-            if (confirm('Remover este aluno da oficina?')) {
-                oficinasAPI.removerAluno(oficinaId, alunoId)
-                    .then(async () => {
-                        const oficinaAtualizada = await oficinasAPI.buscarPorId(oficinaId);
-                        renderizarAlunosParticipantes(oficinaAtualizada.alunos);
-                        
-                        // Atualizar contador na tabela
-                        const rowIndex = editModal.dataset.rowIndex;
-                        const rows = document.querySelectorAll('.table tbody tr');
-                        rows[rowIndex].cells[5].textContent = oficinaAtualizada.alunos.length;
-                        
-                        showEditSuccess('Aluno removido com sucesso!');
-                    })
-                    .catch(error => {
-                        console.error('Erro ao remover aluno:', error);
-                        showEditError(error.message || 'Erro ao remover aluno');
-                    });
-            }
         }
     });
 
@@ -292,8 +172,13 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Atualizar a oficina via API
+        // Obter ID da oficina do modal
         const oficinaId = editModal.dataset.oficinaId;
+        if (!oficinaId) {
+            showEditError('Erro: Oficina não identificada.');
+            return;
+        }
+        
         const oficinaAtualizada = {
             nome,
             tipo,
@@ -304,15 +189,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         oficinasAPI.atualizar(oficinaId, oficinaAtualizada)
             .then(() => {
-                // Atualizar a tabela
-                const rowIndex = editModal.dataset.rowIndex;
-                const rows = document.querySelectorAll('.table tbody tr');
-                const row = rows[rowIndex];
-                
-                row.cells[0].textContent = nome;
-                row.cells[1].textContent = capitalizeFirstLetter(tipo);
-                row.cells[2].textContent = formatDateToDisplay(data);
-                row.cells[3].textContent = local;
+                // Encontrar a linha na tabela usando o ID armazenado
+                const row = document.querySelector(`tr[data-id="${oficinaId}"]`);
+                if (row) {
+                    row.cells[0].textContent = nome;
+                    row.cells[1].textContent = capitalizeFirstLetter(tipo);
+                    row.cells[2].textContent = formatDateToDisplay(data);
+                    row.cells[3].textContent = local;
+                }
                 
                 showEditSuccess('Oficina atualizada com sucesso!');
                 
@@ -334,9 +218,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (confirm('Tem certeza que deseja excluir esta oficina?')) {
                 const row = e.target.closest('tr');
                 const oficinaId = row.dataset.id;
+                const professorId = userSession.get()._id; // Obter ID do professor logado
                 
                 // Chamar API para remover oficina
-                oficinasAPI.remover(oficinaId)
+                Promise.all([
+                    oficinasAPI.deletar(oficinaId),
+                    professoresAPI.removerOficina(professorId, oficinaId)
+                ])
                     .then(() => {
                         row.remove();
                         
@@ -551,6 +439,16 @@ function formatarData(dataString) {
         return data.toLocaleDateString('pt-BR');
     } catch {
         return dataString;
+    }
+}
+
+function formatDateToDisplay(dateString) {
+    if (!dateString) return 'Não especificada';
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('pt-BR');
+    } catch {
+        return dateString;
     }
 }
 

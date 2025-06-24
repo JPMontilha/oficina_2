@@ -79,23 +79,11 @@ async function loadProfessores() {
       row.innerHTML = `
                 <td>${professor.idP || "N/A"}</td>
                 <td>${professor.user?.email || "N/A"}</td>
-                <td>${professor.user?.email || "N/A"}</td>
-                <td>${professor.area || "Não especificada"}</td>
                 <td>
                     <button class="btn btn-primary btn-sm" onclick="verDetalhes('${
                       professor._id
                     }')">
                         Ver Detalhes
-                    </button>
-                    <button class="btn btn-warning btn-sm" onclick="editarProfessor('${
-                      professor._id
-                    }')">
-                        Editar
-                    </button>
-                    <button class="btn btn-danger btn-sm" onclick="deletarProfessor('${
-                      professor._id
-                    }')">
-                        Excluir
                     </button>
                 </td>
             `;
@@ -132,28 +120,6 @@ async function verDetalhes(professorId) {
     console.error("Erro ao carregar detalhes do professor:", error);
     showMessage("Erro ao carregar detalhes do professor", "error");
   }
-}
-
-async function editarProfessor(professorId) {
-  try {
-    const professor = await professoresAPI.buscarPorId(professorId);
-
-    // Preencher o formulário de edição
-    document.getElementById("editProfessorId").value = professor._id;
-    document.getElementById("editCodigo").value = professor.idP;
-    document.getElementById("editNome").value = professor.user.email; // Usando email como nome por enquanto
-    document.getElementById("editEmail").value = professor.user.email;
-    document.getElementById("editArea").value = professor.area || "";
-
-    document.getElementById("editModal").style.display = "block";
-  } catch (error) {
-    console.error("Erro ao carregar dados do professor:", error);
-    showMessage("Erro ao carregar dados do professor", "error");
-  }
-}
-
-function closeEditModal() {
-  document.getElementById("editModal").style.display = "none";
 }
 
 function openAddModal() {
@@ -210,17 +176,3 @@ function logout() {
   }
 }
 
-async function deletarProfessor(professorId) {
-  if (!confirm("Tem certeza que deseja excluir este professor?")) {
-    return;
-  }
-
-  try {
-    await professoresAPI.deletar(professorId);
-    showMessage("Professor excluído com sucesso!", "success");
-    await loadProfessores();
-  } catch (error) {
-    console.error("Erro ao excluir professor:", error);
-    showMessage("Erro ao excluir professor. Tente novamente.", "error");
-  }
-}
