@@ -42,6 +42,10 @@ app.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "html", "cadastro.html"));
 });
 
+app.get("/esqueciSenha", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "html", "esqueciSenha.html"));
+});
+
 app.get("/aluno", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "html", "alunoMain.html"));
 });
