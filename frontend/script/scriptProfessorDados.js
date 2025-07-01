@@ -19,6 +19,9 @@ async function loadProfessorData() {
       return;
     }
 
+    // Configurar navegação baseada no tipo de usuário
+    setupNavigation();
+
     const professor = await professoresAPI.buscarPorEmail(user.email);
     if (!professor) {
       showMessage("Professor não encontrado", "error");
@@ -26,8 +29,10 @@ async function loadProfessorData() {
     }
 
     // Preencher dados pessoais
-    document.getElementById("professor-name").textContent = user.email.split("@")[0];
-    document.getElementById("professor-codigo").textContent = professor.idP || "N/A";
+    document.getElementById("professor-name").textContent =
+      user.email.split("@")[0];
+    document.getElementById("professor-codigo").textContent =
+      professor.idP || "N/A";
     document.getElementById("professor-email").textContent = user.email;
 
     // Carregar oficinas do professor
@@ -41,25 +46,25 @@ async function loadProfessorData() {
 // Função para carregar alunos disponíveis
 async function carregarAlunosDisponiveis() {
   try {
-    const response = await fetch('/api/alunos'); // Ajuste o caminho da API conforme seu backend
-    if (!response.ok) throw new Error('Falha ao carregar alunos');
+    const response = await fetch("/api/alunos"); // Ajuste o caminho da API conforme seu backend
+    if (!response.ok) throw new Error("Falha ao carregar alunos");
 
     const alunos = await response.json();
 
-    const tbody = document.getElementById('available-students');
-    tbody.innerHTML = ''; // limpa o conteúdo atual
+    const tbody = document.getElementById("available-students");
+    tbody.innerHTML = ""; // limpa o conteúdo atual
 
     if (alunos.length === 0) {
       tbody.innerHTML = '<tr><td colspan="4">Nenhum aluno disponível</td></tr>';
       return;
     }
 
-    alunos.forEach(aluno => {
-      const nome = aluno.nome || aluno.user?.email?.split('@')[0] || 'Sem nome';
-      const codigo = aluno.codigo || aluno.ra || 'Sem código';
-      const email = aluno.email || aluno.user?.email || 'Sem e-mail';
+    alunos.forEach((aluno) => {
+      const nome = aluno.nome || aluno.user?.email?.split("@")[0] || "Sem nome";
+      const codigo = aluno.codigo || aluno.ra || "Sem código";
+      const email = aluno.email || aluno.user?.email || "Sem e-mail";
 
-      const tr = document.createElement('tr');
+      const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${nome}</td>
         <td>${codigo}</td>
@@ -71,8 +76,8 @@ async function carregarAlunosDisponiveis() {
       tbody.appendChild(tr);
     });
   } catch (error) {
-    console.error('Erro ao carregar alunos disponíveis:', error);
-    const tbody = document.getElementById('available-students');
+    console.error("Erro ao carregar alunos disponíveis:", error);
+    const tbody = document.getElementById("available-students");
     tbody.innerHTML = '<tr><td colspan="4">Erro ao carregar alunos</td></tr>';
   }
 }
@@ -83,7 +88,8 @@ function loadProfessorWorkshops(oficinas) {
   tbody.innerHTML = "";
 
   if (!oficinas || oficinas.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5">Nenhuma oficina encontrada</td></tr>';
+    tbody.innerHTML =
+      '<tr><td colspan="5">Nenhuma oficina encontrada</td></tr>';
     return;
   }
 
@@ -110,7 +116,7 @@ async function gerenciarAlunos(oficinaId, oficinaName) {
     document.getElementById("workshop-name").textContent = oficinaName;
 
     loadEnrolledStudents(oficina.alunos || []);
-    await carregarAlunosDisponiveis();  // Carrega os alunos do backend para adicionar
+    await carregarAlunosDisponiveis(); // Carrega os alunos do backend para adicionar
 
     document.getElementById("manage-modal").classList.remove("hidden");
 
@@ -139,7 +145,9 @@ function loadEnrolledStudents(alunos) {
       <td>${aluno.ra || "Sem RA"}</td>
       <td>${aluno.user?.email || "Sem e-mail"}</td>
       <td class="actions">
-          <button class="btn btn-danger btn-small" onclick="removerAluno('${aluno._id}', '${aluno.user?.email}')">
+          <button class="btn btn-danger btn-small" onclick="removerAluno('${
+            aluno._id
+          }', '${aluno.user?.email}')">
               Remover
           </button>
       </td>
@@ -150,35 +158,37 @@ function loadEnrolledStudents(alunos) {
 // Função para buscar alunos do backend (rota GET /alunos)
 async function fetchAvailableStudents() {
   try {
-    const response = await fetch('/api/alunos'); // ajuste a URL conforme seu backend
-    if (!response.ok) throw new Error('Falha ao carregar alunos');
+    const response = await fetch("/api/alunos"); // ajuste a URL conforme seu backend
+    if (!response.ok) throw new Error("Falha ao carregar alunos");
     const alunos = await response.json();
     return alunos;
   } catch (error) {
     console.error(error);
-    showMessage('Erro ao buscar alunos disponíveis', 'error');
+    showMessage("Erro ao buscar alunos disponíveis", "error");
     return [];
   }
 }
 
 // Função para renderizar alunos na aba "Adicionar Alunos"
 function renderAvailableStudents(alunos) {
-  const tbody = document.getElementById('available-students');
-  tbody.innerHTML = ''; // limpa a lista
+  const tbody = document.getElementById("available-students");
+  tbody.innerHTML = ""; // limpa a lista
 
   if (!alunos.length) {
     tbody.innerHTML = '<tr><td colspan="4">Nenhum aluno encontrado</td></tr>';
     return;
   }
 
-  alunos.forEach(aluno => {
+  alunos.forEach((aluno) => {
     const row = tbody.insertRow();
     row.innerHTML = `
-      <td>${aluno.nome || aluno.user?.email?.split('@')[0] || 'Sem nome'}</td>
-      <td>${aluno.codigo || aluno.ra || 'Sem código'}</td>
-      <td>${aluno.email || aluno.user?.email || 'Sem e-mail'}</td>
+      <td>${aluno.nome || aluno.user?.email?.split("@")[0] || "Sem nome"}</td>
+      <td>${aluno.codigo || aluno.ra || "Sem código"}</td>
+      <td>${aluno.email || aluno.user?.email || "Sem e-mail"}</td>
       <td class="actions">
-        <button class="btn btn-success btn-small" onclick="adicionarAluno('${aluno._id}', '${aluno.nome || aluno.user?.email}')">Adicionar</button>
+        <button class="btn btn-success btn-small" onclick="adicionarAluno('${
+          aluno._id
+        }', '${aluno.nome || aluno.user?.email}')">Adicionar</button>
       </td>
     `;
   });
@@ -186,13 +196,19 @@ function renderAvailableStudents(alunos) {
 
 // Função para filtrar alunos com base no input da busca
 async function buscarAlunos() {
-  const filtro = document.getElementById('add-student-search').value.toLowerCase();
+  const filtro = document
+    .getElementById("add-student-search")
+    .value.toLowerCase();
 
   const alunos = await fetchAvailableStudents();
 
-  const alunosFiltrados = alunos.filter(aluno => {
-    const nome = (aluno.nome || aluno.user?.email?.split('@')[0] || '').toLowerCase();
-    const codigo = (aluno.codigo || aluno.ra || '');
+  const alunosFiltrados = alunos.filter((aluno) => {
+    const nome = (
+      aluno.nome ||
+      aluno.user?.email?.split("@")[0] ||
+      ""
+    ).toLowerCase();
+    const codigo = aluno.codigo || aluno.ra || "";
     return nome.includes(filtro) || codigo.includes(filtro);
   });
 
@@ -205,42 +221,44 @@ async function adicionarAluno(alunoId, alunoNome) {
 
   try {
     const responseOficina = await fetch(`/api/oficinas/${currentOficinaId}`);
-    if (!responseOficina.ok) throw new Error('Erro ao buscar oficina');
+    if (!responseOficina.ok) throw new Error("Erro ao buscar oficina");
     const oficina = await responseOficina.json();
 
     if (oficina.alunos && oficina.alunos.includes(alunoId)) {
-      showMessage('Aluno já está inscrito nesta oficina', 'error');
+      showMessage("Aluno já está inscrito nesta oficina", "error");
       return;
     }
 
-    const novosAlunos = oficina.alunos ? [...oficina.alunos, alunoId] : [alunoId];
+    const novosAlunos = oficina.alunos
+      ? [...oficina.alunos, alunoId]
+      : [alunoId];
 
     const responseUpdate = await fetch(`/api/oficinas/${currentOficinaId}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${userSession.get().token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userSession.get().token}`,
       },
       body: JSON.stringify({ alunos: novosAlunos }),
     });
 
     if (!responseUpdate.ok) {
       const erroData = await responseUpdate.json();
-      throw new Error(erroData.erro || 'Erro ao atualizar oficina');
+      throw new Error(erroData.erro || "Erro ao atualizar oficina");
     }
 
     // ⚠️ Buscar novamente a oficina atualizada (com dados completos)
     const responseAtualizada = await fetch(`/api/oficinas/${currentOficinaId}`);
-    if (!responseAtualizada.ok) throw new Error('Erro ao buscar oficina atualizada');
+    if (!responseAtualizada.ok)
+      throw new Error("Erro ao buscar oficina atualizada");
     const oficinaAtualizada = await responseAtualizada.json();
 
     loadEnrolledStudents(oficinaAtualizada.alunos || []);
     await buscarAlunos(); // Atualiza lista de disponíveis
-    showMessage('Aluno adicionado com sucesso!', 'success');
-
+    showMessage("Aluno adicionado com sucesso!", "success");
   } catch (error) {
     console.error(error);
-    showMessage(error.message, 'error');
+    showMessage(error.message, "error");
   }
 }
 
@@ -248,61 +266,69 @@ async function adicionarAluno(alunoId, alunoNome) {
 async function removerAluno(alunoId, alunoEmail) {
   if (!confirm(`Deseja remover o aluno ${alunoEmail}?`)) return;
 
-  console.log(`Removendo aluno ${alunoEmail} (${alunoId}) da oficina ${currentOficinaId}`);
+  console.log(
+    `Removendo aluno ${alunoEmail} (${alunoId}) da oficina ${currentOficinaId}`
+  );
 
   try {
     const responseOficina = await fetch(`/api/oficinas/${currentOficinaId}`);
-    if (!responseOficina.ok) throw new Error('Erro ao buscar oficina');
+    if (!responseOficina.ok) throw new Error("Erro ao buscar oficina");
     const oficina = await responseOficina.json();
 
-    const alunosIds = (oficina.alunos || []).map(aluno => aluno._id.toString());
+    const alunosIds = (oficina.alunos || []).map((aluno) =>
+      aluno._id.toString()
+    );
 
     if (!alunosIds.includes(alunoId)) {
-      showMessage('Aluno não encontrado nesta oficina', 'error');
+      showMessage("Aluno não encontrado nesta oficina", "error");
       return;
     }
 
-    console.log(`Alunos antes da remoção: ${alunosIds.join(', ')}`);
+    console.log(`Alunos antes da remoção: ${alunosIds.join(", ")}`);
 
-    const novosAlunos = alunosIds.filter(id => id !== alunoId);
+    const novosAlunos = alunosIds.filter((id) => id !== alunoId);
 
     const responseUpdate = await fetch(`/api/oficinas/${currentOficinaId}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${userSession.get().token}`
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userSession.get().token}`,
       },
       body: JSON.stringify({ alunos: novosAlunos }),
     });
 
-    console.log(`Alunos após a remoção: ${novosAlunos.join(', ')}`);
+    console.log(`Alunos após a remoção: ${novosAlunos.join(", ")}`);
 
     if (!responseUpdate.ok) {
       const erroData = await responseUpdate.json();
-      throw new Error(erroData.erro || 'Erro ao atualizar oficina');
+      throw new Error(erroData.erro || "Erro ao atualizar oficina");
     }
 
     const responseAtualizada = await fetch(`/api/oficinas/${currentOficinaId}`);
-    if (!responseAtualizada.ok) throw new Error('Erro ao buscar oficina atualizada');
+    if (!responseAtualizada.ok)
+      throw new Error("Erro ao buscar oficina atualizada");
     const oficinaAtualizada = await responseAtualizada.json();
 
     loadEnrolledStudents(oficinaAtualizada.alunos || []);
     await buscarAlunos();
-    showMessage('Aluno removido com sucesso!', 'success');
+    showMessage("Aluno removido com sucesso!", "success");
 
-    console.log(`Aluno ${alunoEmail} removido com sucesso da oficina ${oficina.nome}`);
-
+    console.log(
+      `Aluno ${alunoEmail} removido com sucesso da oficina ${oficina.nome}`
+    );
   } catch (error) {
     console.error(error);
-    showMessage(error.message, 'error');
+    showMessage(error.message, "error");
   }
 }
 
 // Evento do botão buscar
-document.querySelector('#add-student-search + button').addEventListener('click', buscarAlunos);
+document
+  .querySelector("#add-student-search + button")
+  .addEventListener("click", buscarAlunos);
 
 // Opcional: busca automática ao digitar (com debounce)
-document.getElementById('add-student-search').addEventListener('input', () => {
+document.getElementById("add-student-search").addEventListener("input", () => {
   clearTimeout(this.delay);
   this.delay = setTimeout(buscarAlunos, 300);
 });
@@ -310,14 +336,14 @@ document.getElementById('add-student-search').addEventListener('input', () => {
 // Atualizar a lista disponível sempre que abrir o modal
 async function abrirModalGerenciarAlunos(oficinaId, oficinaNome) {
   currentOficinaId = oficinaId;
-  document.getElementById('workshop-name').textContent = oficinaNome;
+  document.getElementById("workshop-name").textContent = oficinaNome;
 
   const oficina = await oficinasAPI.buscarPorId(oficinaId);
   loadEnrolledStudents(oficina.alunos || []);
 
   await buscarAlunos(); // carregar lista completa disponível
 
-  document.getElementById('manage-modal').classList.remove('hidden');
+  document.getElementById("manage-modal").classList.remove("hidden");
 }
 
 // Função para abrir modal de edição
@@ -328,6 +354,24 @@ function openEditModal() {
 // Função para fechar modais
 function closeModal(modalId) {
   document.getElementById(modalId).classList.add("hidden");
+}
+
+function setupNavigation() {
+  const userData = userSession.get();
+  if (!userData) return;
+
+  // Configurar link de início baseado no tipo de usuário
+  const inicioLink = document.getElementById("inicio-link");
+  if (inicioLink) {
+    if (userData.tipo === "aluno") {
+      inicioLink.href = "/aluno";
+    } else if (userData.tipo === "professor") {
+      inicioLink.href = "/professor";
+    }
+  }
+
+  // Ocultar links que alunos não devem ver
+  hideMenuLinksForUser();
 }
 
 // Função de logout
@@ -343,9 +387,10 @@ function logout() {
 
 // Função para mostrar mensagens
 function showMessage(message, type) {
-  const messageDiv = type === "error"
-    ? document.getElementById("edit-error-message")
-    : document.getElementById("edit-success-message");
+  const messageDiv =
+    type === "error"
+      ? document.getElementById("edit-error-message")
+      : document.getElementById("edit-success-message");
 
   if (messageDiv) {
     messageDiv.textContent = message;

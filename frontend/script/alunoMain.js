@@ -1,15 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
-  if (!requireLogin()) return;
+  // Verificar acesso - apenas alunos podem acessar esta página
+  if (!checkPageAccess(["aluno"])) return;
 
-  const userData = userSession.get();
-
-  if (userData.tipo !== "aluno") {
-    showMessage("Acesso negado. Esta página é apenas para alunos.", "error");
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 2000);
-    return;
-  }
+  // Ocultar links do menu que alunos não devem ver
+  hideMenuLinksForUser();
 
   const logoutButton = document.getElementById("logout-btn");
   if (logoutButton) {
@@ -194,12 +188,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   try {
     // Carregar dados completos do aluno
     const aluno = await alunosAPI.buscarPorId(userData._id);
-    
+
     // Atualizar interface com os dados do aluno
     updateDashboard(aluno);
     updateDadosPessoais(aluno);
     updateOficinas(aluno);
-    
   } catch (error) {
     console.error("Erro ao carregar dados:", error);
     showMessage("Erro ao carregar dados do sistema", "error");
@@ -209,13 +202,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 // Atualiza o dashboard (cards superiores)
 function updateDashboard(aluno) {
   // Período do aluno
-  const periodoElement = document.querySelector(".card:nth-child(2) .card-count");
+  const periodoElement = document.querySelector(
+    ".card:nth-child(2) .card-count"
+  );
   if (periodoElement) {
     periodoElement.textContent = aluno.periodo || "Não informado";
   }
 
   // Total de oficinas (será atualizado depois)
-  const oficinaCountElement = document.querySelector(".card:first-child .card-count");
+  const oficinaCountElement = document.querySelector(
+    ".card:first-child .card-count"
+  );
   if (oficinaCountElement) {
     oficinaCountElement.textContent = "Carregando...";
   }
@@ -262,14 +259,16 @@ async function updateOficinas(aluno) {
 
     // Buscar todas as oficinas
     const todasOficinas = await oficinasAPI.listar();
-    
+
     // Filtrar apenas as oficinas do aluno
-    const oficinasDoAluno = todasOficinas.filter(oficina => 
-      oficina.alunos.some(a => a._id === aluno._id)
+    const oficinasDoAluno = todasOficinas.filter((oficina) =>
+      oficina.alunos.some((a) => a._id === aluno._id)
     );
 
     // Atualizar contagem no dashboard
-    const oficinaCountElement = document.querySelector(".card:first-child .card-count");
+    const oficinaCountElement = document.querySelector(
+      ".card:first-child .card-count"
+    );
     if (oficinaCountElement) {
       oficinaCountElement.textContent = oficinasDoAluno.length;
     }
@@ -286,7 +285,9 @@ async function updateOficinas(aluno) {
       return;
     }
 
-    tableBody.innerHTML = oficinasDoAluno.map(oficina => `
+    tableBody.innerHTML = oficinasDoAluno
+      .map(
+        (oficina) => `
       <tr>
         <td>${oficina.nome || "Sem nome"}</td>
         <td>${oficina.tipo || "Não especificado"}</td>
@@ -295,12 +296,13 @@ async function updateOficinas(aluno) {
         <td>${oficina.responsavel?.nome || "Não especificado"}</td>
         <td>${oficina.alunos?.length || 0}</td>
       </tr>
-    `).join("");
-    
+    `
+      )
+      .join("");
   } catch (error) {
     console.error("Erro ao carregar oficinas:", error);
     showMessage("Erro ao carregar suas oficinas", "error");
-    
+
     const tableBody = document.querySelector(".table tbody");
     if (tableBody) {
       tableBody.innerHTML = `
@@ -317,10 +319,10 @@ async function updateOficinas(aluno) {
 // Função auxiliar para formatar data
 function formatarData(dataString) {
   if (!dataString) return "Não especificada";
-  
+
   try {
     const data = new Date(dataString);
-    return data.toLocaleDateString('pt-BR');
+    return data.toLocaleDateString("pt-BR");
   } catch {
     return dataString; // Retorna o valor original se não puder formatar
   }

@@ -20,6 +20,12 @@ async function loadStudentData() {
       return;
     }
 
+    // Ocultar links do menu que alunos não devem ver
+    hideMenuLinksForUser();
+
+    // Configurar navegação baseada no tipo de usuário
+    setupNavigation();
+
     const aluno = await alunosAPI.buscarPorEmail(user.email);
     if (!aluno) {
       showMessage("Aluno não encontrado", "error");
@@ -30,7 +36,9 @@ async function loadStudentData() {
     document.getElementById("user-name").textContent = user.email.split("@")[0];
     document.getElementById("user-ra").textContent = aluno.ra || "N/A";
     document.getElementById("user-email").textContent = user.email;
-    document.getElementById("user-periodo").textContent = `${aluno.periodo || 1}º Período`;
+    document.getElementById("user-periodo").textContent = `${
+      aluno.periodo || 1
+    }º Período`;
 
     // Carregar oficinas do aluno
     loadStudentWorkshops(aluno.oficinas || []);
@@ -46,7 +54,8 @@ function loadStudentWorkshops(oficinas) {
   tbody.innerHTML = "";
 
   if (!oficinas || oficinas.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5">Nenhuma oficina encontrada</td></tr>';
+    tbody.innerHTML =
+      '<tr><td colspan="5">Nenhuma oficina encontrada</td></tr>';
     return;
   }
 
@@ -60,6 +69,24 @@ function loadStudentWorkshops(oficinas) {
       <td>-</td>
     `;
   });
+}
+
+function setupNavigation() {
+  const userData = userSession.get();
+  if (!userData) return;
+
+  // Configurar link de início baseado no tipo de usuário
+  const inicioLink = document.getElementById("inicio-link");
+  if (inicioLink) {
+    if (userData.tipo === "aluno") {
+      inicioLink.href = "/aluno";
+    } else if (userData.tipo === "professor") {
+      inicioLink.href = "/professor";
+    }
+  }
+
+  // Ocultar links que alunos não devem ver
+  hideMenuLinksForUser();
 }
 
 // Função para abrir modal de edição
@@ -85,9 +112,10 @@ function logout() {
 
 // Função para mostrar mensagens
 function showMessage(message, type) {
-  const messageDiv = type === "error"
-    ? document.getElementById("edit-error-message")
-    : document.getElementById("edit-success-message");
+  const messageDiv =
+    type === "error"
+      ? document.getElementById("edit-error-message")
+      : document.getElementById("edit-success-message");
 
   if (messageDiv) {
     messageDiv.textContent = message;
@@ -99,7 +127,9 @@ function showMessage(message, type) {
 }
 
 // Fechar modal ao clicar no X
-document.querySelector(".close-modal").addEventListener("click", closeEditModal);
+document
+  .querySelector(".close-modal")
+  .addEventListener("click", closeEditModal);
 
 // Carregar dados quando a página carregar
 document.addEventListener("DOMContentLoaded", loadStudentData);

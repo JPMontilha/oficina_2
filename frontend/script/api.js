@@ -136,9 +136,10 @@ const professoresAPI = {
 
     const professor = professores.find((professor) =>
       professor.oficinas?.some((oficinaIdObj) => {
-        const idComparar = typeof oficinaIdObj === "string"
-          ? oficinaIdObj
-          : oficinaIdObj.toString();
+        const idComparar =
+          typeof oficinaIdObj === "string"
+            ? oficinaIdObj
+            : oficinaIdObj.toString();
         return idComparar === oficinaId.toString();
       })
     );
@@ -178,13 +179,13 @@ const professoresAPI = {
       oficinasAtuais.push(oficinaId);
     }
 
-  // 3. Enviar atualização com o array atualizado
-  const professorAtualizado = await professoresAPI.atualizar(professorId, {
-    oficinas: oficinasAtuais,
-  });
+    // 3. Enviar atualização com o array atualizado
+    const professorAtualizado = await professoresAPI.atualizar(professorId, {
+      oficinas: oficinasAtuais,
+    });
 
-  return professorAtualizado;
-},
+    return professorAtualizado;
+  },
 
   async removerOficina(professorId, oficinaId) {
     // 1. Buscar o professor atual
@@ -206,7 +207,6 @@ const professoresAPI = {
 
     return professorAtualizado;
   },
-
 };
 
 const userSession = {
@@ -288,4 +288,59 @@ function requireLogin() {
     return false;
   }
   return true;
+}
+
+// Função para verificar acesso a páginas específicas
+function checkPageAccess(allowedTypes = []) {
+  if (!requireLogin()) return false;
+
+  const userData = userSession.get();
+  if (!userData || !userData.tipo) {
+    showMessage("Sessão inválida. Faça login novamente.", "error");
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 2000);
+    return false;
+  }
+
+  if (allowedTypes.length > 0 && !allowedTypes.includes(userData.tipo)) {
+    const redirectMap = {
+      aluno: "/aluno",
+      professor: "/professor",
+    };
+
+    showMessage(
+      "Acesso negado. Você não tem permissão para acessar esta página.",
+      "error"
+    );
+    setTimeout(() => {
+      window.location.href = redirectMap[userData.tipo] || "/login";
+    }, 2000);
+    return false;
+  }
+
+  return true;
+}
+
+// Função para ocultar links do menu baseado no tipo de usuário
+function hideMenuLinksForUser() {
+  const userData = userSession.get();
+  if (!userData) return;
+
+  if (userData.tipo === "aluno") {
+    // Ocultar apenas o link "Alunos" - manter "Professores" visível
+    const alunosLink =
+      document.getElementById("alunos-link") ||
+      document.querySelector('a[href="/alunos"]');
+
+    if (alunosLink && alunosLink.parentElement) {
+      alunosLink.parentElement.style.display = "none";
+    }
+  }
+}
+
+// Função para verificar se usuário pode editar período
+function canEditPeriod() {
+  const userData = userSession.get();
+  return userData && userData.tipo === "professor";
 }

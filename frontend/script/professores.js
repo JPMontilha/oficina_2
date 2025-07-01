@@ -2,7 +2,11 @@ let professoresTable;
 let searchInput;
 
 document.addEventListener("DOMContentLoaded", function () {
-  if (!requireLogin()) return;
+  // Verificar acesso - alunos e professores podem acessar esta página
+  if (!checkPageAccess(["aluno", "professor"])) return;
+
+  // Configurar navegação baseada no tipo de usuário
+  setupNavigation();
 
   searchInput = document.getElementById("search-professores");
   professoresTable = document.getElementById("professores-table");
@@ -44,6 +48,24 @@ document.addEventListener("DOMContentLoaded", function () {
     addForm.addEventListener("submit", handleAddSubmit);
   }
 });
+
+function setupNavigation() {
+  const userData = userSession.get();
+  if (!userData) return;
+
+  // Configurar link de início baseado no tipo de usuário
+  const inicioLink = document.getElementById("inicio-link");
+  if (inicioLink) {
+    if (userData.tipo === "aluno") {
+      inicioLink.href = "/aluno";
+    } else if (userData.tipo === "professor") {
+      inicioLink.href = "/professor";
+    }
+  }
+
+  // Ocultar links que alunos não devem ver
+  hideMenuLinksForUser();
+}
 
 async function loadProfessores() {
   try {
@@ -175,4 +197,3 @@ function logout() {
     window.location.href = "/login";
   }
 }
-

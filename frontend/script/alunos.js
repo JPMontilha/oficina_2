@@ -2,7 +2,11 @@ let alunosTable;
 let searchInput;
 
 document.addEventListener("DOMContentLoaded", function () {
-  if (!requireLogin()) return;
+  // Verificar acesso - apenas professores podem acessar esta página
+  if (!checkPageAccess(["professor"])) return;
+
+  // Configurar navegação baseada no tipo de usuário
+  setupNavigation();
 
   searchInput = document.getElementById("search-alunos");
   alunosTable = document.getElementById("alunos-table");
@@ -19,6 +23,18 @@ document.addEventListener("DOMContentLoaded", function () {
     console.error("Elementos essenciais não encontrados na página");
     showMessage("Erro: Elementos da página não encontrados", "error");
     return;
+  }
+
+  // Esconder botão de edição de período se não for professor
+  if (!canEditPeriod()) {
+    toggleModeBtn.style.display = "none";
+    saveButton.style.display = "none";
+
+    // Também esconder a coluna de alteração de período
+    const editPeriodHeader = document.querySelector(".edit-period");
+    if (editPeriodHeader) {
+      editPeriodHeader.style.display = "none";
+    }
   }
 
   const logoutButton = document.getElementById("logout-btn");
@@ -63,6 +79,24 @@ document.addEventListener("DOMContentLoaded", function () {
   loadAlunos();
 });
 
+function setupNavigation() {
+  const userData = userSession.get();
+  if (!userData) return;
+
+  // Configurar link de início baseado no tipo de usuário
+  const inicioLink = document.getElementById("inicio-link");
+  if (inicioLink) {
+    if (userData.tipo === "aluno") {
+      inicioLink.href = "/aluno";
+    } else if (userData.tipo === "professor") {
+      inicioLink.href = "/professor";
+    }
+  }
+
+  // Ocultar links que alunos não devem ver
+  hideMenuLinksForUser();
+}
+
 function logout() {
   if (confirm("Tem certeza que deseja sair?")) {
     userSession.clear();
@@ -79,6 +113,9 @@ async function loadAlunos() {
     const alunos = await alunosAPI.listar();
     const tbody = alunosTable.querySelector("tbody");
 
+    // Verificar se o usuário pode editar período
+    const isTeacher = canEditPeriod();
+
     if (!tbody) {
       console.error("Tabela de alunos não encontrada");
       showMessage("Erro: Tabela não encontrada", "error");
@@ -88,36 +125,49 @@ async function loadAlunos() {
     tbody.innerHTML = "";
 
     if (!alunos || alunos.length === 0) {
-      tbody.innerHTML =
-        '<tr><td colspan="5" style="text-align: center;">Nenhum aluno encontrado</td></tr>';
+      const colSpan = isTeacher ? "5" : "4";
+      tbody.innerHTML = `<tr><td colspan="${colSpan}" style="text-align: center;">Nenhum aluno encontrado</td></tr>`;
       showMessage("Nenhum aluno encontrado", "warning");
       return;
     }
 
     alunos.forEach((aluno) => {
       const row = tbody.insertRow();
-      row.innerHTML = `
+
+      // Conteúdo básico da linha
+      let rowContent = `
         <td>${aluno.ra || "N/A"}</td>
         <td>${aluno.user?.email || "N/A"}</td>
         <td>Ativo</td>
         <td>${aluno.periodo}º Período</td>
-        <td class="edit-period hidden">
-          <select class="period-select form-control" data-id="${aluno._id}">
-            ${Array.from({ length: 8 }, (_, i) => i + 1)
-              .map(
-                (num) => `
-              <option value="${num}" ${
-                  aluno.periodo === num ? "selected" : ""
-                }>${num}º Período</option>
-            `
-              )
-              .join("")}
-          </select>
-        </td>
       `;
+
+      // Adicionar coluna de edição apenas para professores
+      if (isTeacher) {
+        rowContent += `
+          <td class="edit-period hidden">
+            <select class="period-select form-control" data-id="${aluno._id}">
+              ${Array.from({ length: 8 }, (_, i) => i + 1)
+                .map(
+                  (num) => `
+                <option value="${num}" ${
+                    aluno.periodo === num ? "selected" : ""
+                  }>${num}º Período</option>
+              `
+                )
+                .join("")}
+            </select>
+          </td>
+        `;
+      }
+
+      row.innerHTML = rowContent;
     });
 
-    showMessage(`${alunos.length} aluno(s) carregado(s) com sucesso`, "success");
+    showMessage(
+      `${alunos.length} aluno(s) carregado(s) com sucesso`,
+      "success"
+    );
   } catch (error) {
     console.error("Erro ao carregar alunos:", error);
     showMessage("Erro ao carregar lista de alunos: " + error.message, "error");
@@ -135,7 +185,9 @@ async function salvarPeriodos() {
         const alunoId = periodoSelect.dataset.id;
         const novoPeriodo = parseInt(periodoSelect.value);
         const periodoAtualText = row.cells[3].textContent;
-        const periodoAnterior = parseInt(periodoAtualText.replace("º Período", ""));
+        const periodoAnterior = parseInt(
+          periodoAtualText.replace("º Período", "")
+        );
 
         if (novoPeriodo !== periodoAnterior) {
           alunosAtualizados.push({ id: alunoId, periodo: novoPeriodo });

@@ -4,6 +4,9 @@ let searchInput;
 document.addEventListener("DOMContentLoaded", function () {
   if (!requireLogin()) return;
 
+  // Configurar navegação baseada no tipo de usuário
+  setupNavigation();
+
   searchInput = document.getElementById("search-oficinas");
   oficinasTable = document.getElementById("oficinas-table");
 
@@ -45,6 +48,24 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+function setupNavigation() {
+  const userData = userSession.get();
+  if (!userData) return;
+
+  // Configurar link de início baseado no tipo de usuário
+  const inicioLink = document.getElementById("inicio-link");
+  if (inicioLink) {
+    if (userData.tipo === "aluno") {
+      inicioLink.href = "/aluno";
+    } else if (userData.tipo === "professor") {
+      inicioLink.href = "/professor";
+    }
+  }
+
+  // Ocultar links que alunos não devem ver
+  hideMenuLinksForUser();
+}
+
 async function loadOficinas() {
   try {
     if (!oficinasTable) {
@@ -75,7 +96,6 @@ async function loadOficinas() {
     for (const oficina of oficinas) {
       const row = tbody.insertRow();
 
-
       row.innerHTML = `
         <td>${oficina.nome || "Sem nome"}</td>
         <td>${oficina.tipo || "Não especificado"}</td>
@@ -83,7 +103,9 @@ async function loadOficinas() {
         <td>${oficina.local || "Não especificado"}</td>
         <td>${oficina.alunos?.length || 0}</td>
         <td>
-            <button class="btn btn-primary btn-sm" onclick="verDetalhes('${oficina._id}')">
+            <button class="btn btn-primary btn-sm" onclick="verDetalhes('${
+              oficina._id
+            }')">
                 Ver Detalhes
             </button>
         </td>
@@ -229,12 +251,12 @@ async function deletarOficina(oficinaId) {
 
 // Funções auxiliares
 function formatarData(dataString) {
-    if (!dataString) return "Não especificada";
-    
-    try {
-        const data = new Date(dataString);
-        return data.toLocaleDateString('pt-BR');
-    } catch {
-        return dataString;
-    }
+  if (!dataString) return "Não especificada";
+
+  try {
+    const data = new Date(dataString);
+    return data.toLocaleDateString("pt-BR");
+  } catch {
+    return dataString;
+  }
 }

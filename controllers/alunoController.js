@@ -39,7 +39,13 @@ async function atualizarAluno(req, res) {
   try {
     const atualizacoes = { ...req.body };
 
-    // Se estiver atualizando a senha, criptografa
+    // Se estiver atualizando a senha usando dot notation, criptografa
+    if (atualizacoes["user.senha"]) {
+      const senhaHash = await bcrypt.hash(atualizacoes["user.senha"], 10);
+      atualizacoes["user.senha"] = senhaHash;
+    }
+
+    // Se estiver atualizando a senha usando objeto user, criptografa
     if (atualizacoes.user && atualizacoes.user.senha) {
       const senhaHash = await bcrypt.hash(atualizacoes.user.senha, 10);
       atualizacoes.user.senha = senhaHash;
